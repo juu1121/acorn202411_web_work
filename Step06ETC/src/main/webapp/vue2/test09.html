@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>test09.html</title>
+</head>
+<body>
+	<div class="container" id="app">
+		<table>
+			<thead>
+				<tr>
+					<th>번호</th>
+					<th>이름</th>
+					<th>주소</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="tmp in members">
+					<td>{{tmp.num}}</td>
+					<td>{{tmp.name}}</td>
+					<td>{{tmp.addr}}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		new Vue({
+			el:"#app",
+			data:{
+				members:[]
+			},
+			created(){
+				//Vuejs가 초기화되었을떄 = 그냥처음 로딩됐을때 말하는듯.
+				//Vuejs가 초기화되었을떄 호출되는 함수(created안에서 호출하면, 처음에 실행된다.)
+				//렌더링에 필요한 데이터를 서버로부터 받아온다.
+				fetch("members.jsp")
+				.then(res=>res.json())
+				.then(data=>{
+					//data는 [{}, {}, {}] 형식의 배열이다.
+					this.members=data; //응답받은 data가 배열 -> members모델이 참조하는 배열이 바뀐다!
+				})
+				.catch(error=>{ 
+					console.log("에러정보"+error);
+				})
+			}  
+		});
+	</script>
+</body>
+</html>

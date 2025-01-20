@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>test05.html</title>
+<style>
+	.box{
+		width: 100px;
+		height: 100px;
+		border: 1px solid red;
+	}
+	.bigger{
+		width: 200px;
+		height: 200px;
+	}
+	.yellow-bg{
+		background-color:yellow;
+	}
+</style>
+</head>
+<body>
+	<div class="container" id="app">
+		<h1>클래스 추가 및 제거</h1>
+		<div v-bind:class="['box', 'bigger', 'yellow-bg']">box</div>
+		<div v-bind:class="classArray">box2</div>
+		<div v-bind:class="{box:true, bigger:true, 'yellow-bg':true}">box3</div>
+		<div :class="classObject">box4</div>  <!-- v-bind는 생략가능  -->
+		<h3>체크박스로 class 제어하기</h3>
+		<label>
+			<input type="checkbox" v-model="isBox">box
+		</label>
+		<p>isBox : <strong>{{isBox}}</strong></p>
+		
+		<label>
+			<input type="checkbox" v-model="isYellow">yellow-bg
+		</label>
+		
+		 
+		<div v-bind:class="{box:isBox, 'yellow-bg':isYellow}">box5</div>
+		
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		new Vue({
+			el:"#app",
+			data:{
+				classArray:['box', 'bigger', 'yellow-bg'],
+				classObject:{box:true, bigger:true, 'yellow-bg':true},
+				isBox:false,
+				isYellow:false,
+				test:false
+			}
+		})
+	</script>
+</body>
+</html>

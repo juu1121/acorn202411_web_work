@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="container" id="app">
+		<h3>vue js에서 인라인 css조작하기</h3>
+		<p v-bind:style="{color:'red', fontSize:'30px'}">p1입니다</p>
+		
+		<h3>css를 동적으로 변경하기</h3>
+		글자크기 <input type="range" v-model="fontSize" min="10" max="100" step="1" />
+		<br />
+		글자 색상 <input type="color" v-model="color" />
+		<p v-bind:style="{fontSize:fontSize+'px', color:color}">
+			글자크기 : <strong>{{fontSize}}</strong>px
+			<br />
+			글자색상 : <strong>{{color}}</strong>
+		</p>
+		<h3>모델 object를 이용해서 css적용하기</h3>
+		<div :style="styleObj">box</div>
+		
+		<h3>모델의 값을 모델 object에서 사용할수있을까?</h3>
+		<p :style="myStyle">
+			color: <strong>{{myStyle.color}}</strong>
+			<br />
+			fontSize: <strong>{{myStyle.fontSize}}</strong>
+		</p>
+ 	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		new Vue({
+			el:"#app",
+			data:{
+				fontSize:16,
+				color:"#000000",
+				styleObj:{
+					width:"100px",
+					height:"100px",
+					border: "1px solid red"
+				}
+			},
+			/*
+			computed object 안에 있는 함수의 이름이 모델명이다
+			해당함수 안에서 리턴하는 데이터가 모델 데이터 이다
+			또 다른 모델 데이터를 이용해서 모델 데이터에 활용할때 사용한다. 
+			함수이기 때문에 함수 안에서 여러가지 로직을 수행한 다음 데이터를 리턴해 줄수도 있다.
+			종속된 모델(this.color, this.fontSize) 값이 변경되면 자동으로 새로운값을 받아가서 사용하게 설계 되어 있음 
+			*/
+			computed:{
+				myStyle(){ //얘도 모델, 계산된 모델
+					//다른 코딩을 하고 결과값리턴도 가능
+					console.log("호출됨!");
+					//함수안에서 리턴하는 값이 myStyle이라는 모델의 데이터가 된다 -> 리턴된값이{{}}여기서 사용!
+					return {color:this.color, fontSize:this.fontSize+"px"};
+				}
+			}
+		});
+	</script>
+</body>
+</html>

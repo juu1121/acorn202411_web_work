@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>index.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>인덱스 페이지 입니다</h1>
+		<ul>
+			<li><a href="fortune">오늘의 운세</a></li>
+			<li><a href="friends">친구목록</a></li>
+			<li><a href="friends.jsp">친구목록2</a></li>
+			<li><a href="member?num=1">1번회원의 정보보기_서블릿</a></li>
+			<li><a href="member?num=1.jsp">1번회원의 정보보기_서블릿</a></li>
+			<li><a href="member.jsp?num=1">1번회원의 정보보기2_jsp</a></li>
+			<li><a href="member/list">회원목록보기</a></li>
+			<li><a href="member/list.jsp">회원목록보기2</a></li>
+		</ul>
+		
+		<form action="send" method="get">
+			<input type="text" name="msg" placeholder="할말입력..."/>
+			<button type = "submit">g전송</button>
+		</form>
+		
+		<br>
+		
+		<form action="send" method="post">
+			<input type="text" name="msg" placeholder="할말입력..."/>
+			<button type = "submit">p전송</button>
+		</form>
+		
+		<br>
+		<h2>jsp페이지로 요청하기</h2>
+		<form action="send.jsp" method="post">
+			<input type="text" name="msg" placeholder="할말입력..."/>
+			<button type = "submit">jsp전송</button>
+		</form>
+		
+	</div>
+</body>
+</html>

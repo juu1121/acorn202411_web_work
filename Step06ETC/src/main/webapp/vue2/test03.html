@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/vue/test03.html</title>
+<style>
+	.wrapper{
+		display:flex;
+	}
+	.box{
+		width:100px;
+		height:100px;
+		border:1px solid red;
+	}
+</style>
+</head>
+<body>
+	<div class="wrapper" id="app">
+		<div @click="clicked" class="box">box1</div>
+		<div @click="clicked" class="box">box2</div>
+		<div @click="clicked" class="box">box3</div>
+		<div @click="clicked" class="box">box4</div>
+		<div @click="clicked" class="box">box5</div>
+	</div>
+
+	<!-- vue js 로딩하기 -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+	/*
+		클릭한 div의 innerText를 "clicked!"
+		배경색을 "yellow"로 변경되도록 해보세요 (vue를 이용해서)
+	*/
+	new Vue({
+		el:"#app",
+		methods:{
+			//이 함수를 EventListener함수로 등록했기때문에, 매개변수에 event 객체가 전달된다. 
+			clicked(e){
+				e.target.innerText="clicked!"
+				e.target.style.backgroundColor="yellow";
+			}
+		}
+	});
+	
+	</script>
+</body>
+</html>

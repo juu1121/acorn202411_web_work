@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/vue2/test01.html</title>
+<style>
+	.box{
+		width:100px;
+		height:100px;
+		background-color:yellow;
+		border:1px solid red;
+	}
+</style>
+<!-- vue js 로딩하기 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+	<div class="container" id="app">
+		<input type="text" v-model="msg" /> <!-- 입력한값이 msg모델에 대입하라 -->
+		<p>{{msg}}</p>
+		<h3>좋아하는 음식을 선택해보세요</h3>
+		<select v-model="food"> <!-- 여기서 선택한게 food라는 모델이야 -->
+			<option value="">선택</option>
+			<option value="ramen">라면</option>
+			<option value="kimbap">김밥</option>
+			<option value="dduk">떡볶이</option>
+		</select>
+		<p>나는 <strong>{{food}}</strong>를 좋아해요!</p>
+		<h3>노란박스</h3>
+		<input type="checkbox" v-model="isShow" /> 보이게하기  <!-- 체크박스르 모델로 관리할때, 체크되면ture, 안되면false -->
+		<div class="box" v-show="isShow"></div>
+		
+		<h3>목록 출력</h3>
+		<button v-on:click="change">동물로변경</button>
+		<ul>
+			<li v-for="tmp in names">{{tmp}}</li>
+			<!-- 반복문돌면서 names에 있는걸 tmp에 받고, tmp에 있는걸 이너텍스트로 출력 -->
+			<!-- 배열의 내용이 변화되면 {{}}이 자동으로 업데이트된다. -->
+		</ul>
+	</div>
+	<script>
+		new Vue({
+			el:"#app",
+			data:{ //얘네가 모델
+				msg:"",
+				food:"",
+				isShow:false,
+				names:["김구라", "해골", "원숭이"] //문자열이 들어있는 배열
+			},
+			methods:{
+				change:function(){
+					this.names=["강아지", "코끼리","헷갈령"]
+				}
+			}
+		});
+		
+	</script>
+</body>
+</html>

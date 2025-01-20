@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/jquery/ajax2.html</title>
+</head>
+<body>
+	<button id="getBtn">친구 목록 받아오기</button>
+	<h3>친구 목록입니다.</h3>
+	<ul id="list">
+	
+	</ul>
+	<!-- jquery 로딩-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"> </script>
+	<script>
+	//버튼을 클릭했을때 실행할 함수등록
+	$("#getBtn").click(()=>{
+		$.ajax({
+			url:"friends.jsp",  //어디에요청
+			method:"get", //어떤방식으로 요청
+			success:(res)=>{ //응답되는내용이 ()여기에 담아진다.
+				//res는 친구 이름이 담긴 배열이다.
+				console.log(res);
+				//반복문 돌면서
+				for(let i=0; i<res.length; i++){
+					//반복 횟수 만큰 li요소를 만들고 이름을 출력하고 id가 list 요소의 자식요소로 추가한다.
+					$("<li>").text(res[i]).appendTo("#list")
+				}
+
+			}
+		});
+		
+	});	
+	</script>
+</body>
+</html>

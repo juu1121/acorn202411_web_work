@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>/vue/test04.html</title>
+</head>
+<body>
+	<div class="container" id="app">
+		<h1>form submit 이벤트 처리</h1>
+		<form action="send.jsp" method="post" @submit="onSubmit">
+			<input type="text" name="msg" placeholder="메세지 입력..." />
+			<button type="submit">전송</button>
+		</form>
+		
+		<h1>form submit 이벤트 처리2</h1>
+		<form action="send.jsp" method="post" @submit.prevent="onSubmit2">
+			<input type="text" name="msg" placeholder="메세지 입력..." />
+			<button type="submit">전송</button>
+		</form>
+		<p>formServer: <strong>{{message}}</strong></p>
+	</div>
+	
+	<!-- vue js 로딩하기 -->
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<script>
+		//위의 form에서 전송버튼을 눌렀을때 폼의 제출을 막아보세요
+		new Vue({
+			el:"#app",
+			data:{
+				message:""
+			},
+			methods:{
+				onSubmit(e){
+					e.preventDefault();
+				},
+				onSubmit2(event){
+					//여기서 event.target 은 form 요소의 참조값 
+					
+					//폼에 입력한 내용을 모두 FormData 객체에 담기
+					const data=new FormData(event.target);
+					//FormData 를 이용해서 query string 얻어내기
+					const queryString = new URLSearchParams(data).toString();//msg=hello&& xxx=xxx...
+					//action 속성의 value 
+					const url=event.target.action; // "send.jsp"					
+					//페치함수를 호출하면서, 문자열과 오브젝트전달 
+					fetch(url, {
+						method:"POST",
+						headers:{"Content-Type":"application/x-www-form-urlencoded; charset=utf-8"},
+						body:queryString
+					})
+					.then(res=>res.json())
+					.then(data=>{
+						//응답받은 data는 {fromServer:"메세지 잘 받았어 클라이언트야!"} 모양의 object이다.
+						this.message=data.formServer
+					})
+					.catch(error=>{
+						console.log("에러정보:"+error);
+					});
+				}
+			}
+		});
+	</script>
+</body>
+</html>
