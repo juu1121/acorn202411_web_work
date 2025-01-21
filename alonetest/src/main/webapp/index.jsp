@@ -4,27 +4,40 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+
+<title>네비바 푸터</title>
+<%--포토라마 --%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/include/jquery_plugin/css/fotorama.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"> </script>
+    <script src="${pageContext.request.contextPath}/include/jquery_plugin/js/fotorama.js"></script>
+    
+<%-- 부트스트랩로딩 --%>
+<jsp:include page="/include/resource.jsp"></jsp:include>
 </head>
-<body>
-	<div class="container">
-		<h1>연습하는인덱스페이지</h1>
-		<ul>
-		<li><a href="test?abc=바봉">test?abc=1_서블릿</a></li>
-		<li><a href="test?abc=잉.jsp">test?abc=1.jsp_서블릿</a></li>
-		<li><a href="test.jsp?abc=봉봉">test.jsp?abc=1_jsp</a></li>
-		</ul>
+
+
+<body class="d-flex flex-column min-vh-100">
+	<div class="main flex-grow-1"> <%-- 푸터를 제외한 내용을 감싼div --%>
+	
+		<%-- 네비바 --%>
+		<jsp:include page="/include/navbar.jsp">
+			<jsp:param value="index" name="current"/>
+		</jsp:include>
 		
-		<form action="test" method="get">
-			<input type="text" name="abc" placeholder="할말입력..."/>
-			<button type = "submit">g전송</button>
-		</form>
-		
-		<form action="test.jsp" method="get">
-			<input type="text" name="abc" placeholder="할말입력..."/>
-			<button type = "submit">g전송</button>
-		</form>
-		
+		<div class="container" >
+			<h1>이미지 슬라이더</h1>
+			 <div class="d-flex justify-content-center">
+				<div class="fotorama" data-allowfullscreen="true"  data-autoplay="true" data-keyboard="true"  data-nav="thumbs"  >
+					<img src="include/img/top06.jpg" />
+					<img src="include/img/top07.jpg" />
+					<img src="include/img/top08.jpg" />
+				</div>
+			</div>
+		</div>
+			
 	</div>
+	
+	<%-- 푸터 --%>
+	<jsp:include page="/include/footer.jsp"/>
 </body>
 </html>
