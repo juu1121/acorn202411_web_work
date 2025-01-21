@@ -15,7 +15,7 @@
 		String msg=request.getParameter("msg");
 	%>
 	<p> msg 라는 파라미터 명으로 전송된 내용 : <strong><%=msg %></strong></p>
-	<%-- 위의 2 줄의 코딩 대신에 아래와 같이 응답할수도 있다 --%>
+	<%-- 위의 2 줄의 코딩 대신에 아래와 같이 응답할수도 있다 //EL은 자바코드에서 못써여~ --%>
 	<p> msg 라는 파라미터 명으로 전송된 내용 : <strong>${param.msg }</strong></p>
 </body>
 </html>

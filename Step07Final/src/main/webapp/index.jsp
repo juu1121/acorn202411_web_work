@@ -11,6 +11,8 @@
 		<h1>인덱스 페이지 입니다.</h1>
 		<ul>
 			<li><a href="${pageContext.request.contextPath}/jstl/hello.jsp">JSTL 테스트</a></li>
+			<li><a href="${pageContext.request.contextPath}/user/signup-form.jsp">회원가입</a></li>
+			<li><a href="${pageContext.request.contextPath}/user/login-form.jsp">로그인</a></li>
 		</ul>
 	</div>
 </body>

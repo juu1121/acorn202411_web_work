@@ -1,4 +1,6 @@
 -- 가입된 회원정보를 저장할 테이블 --
+-- 가입되면 일반 직원--
+-- profileImage를 작성하지않고 row만들면, 비어있다=NULL --
 CREATE TABLE users(
 	num NUMBER PRIMARY KEY,
 	userName VARCHAR2(100) UNIQUE,

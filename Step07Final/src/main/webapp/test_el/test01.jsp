@@ -31,7 +31,7 @@
 	<p>10 == 10 : ${10 == 10 }</p>
 	<p>10 == 10 : ${10 eq 10 }</p>
 	<p>10 != 10 : ${10 != 10 }</p>
-	<!-- <p>10 != 10 : ${10 ne 10 }</p> -->
+	<!-- <p>10 != 10 : ${10 ne 10 }</p> --> <!-- 낫이퀄..이클립스가 멍청해서 에러나가지궁 주석처리 -->
 	
 	<h2>논리연산</h2>
 	<p> true || false : ${true || false }</p>
@@ -42,7 +42,7 @@
 	<p> not true: ${not true }</p>
 	
 	<h2>empty 연산자 (비어 있는지 여부)</h2>
-	<p> null 혹은 빈 문자열("") 는  true 로 판정된다.</p>
+	<p> null 혹은 빈 문자열("") 는  비었다고(true 로 판정)된다.</p>
 	<p> empty null : ${empty null }</p>
 	<p> empty "" : ${empty "" }</p>
 	<p> not empty null : ${ not empty null }</p>
