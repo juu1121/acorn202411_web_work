@@ -19,27 +19,27 @@
 					class="form-control" type="text" name="id" id="id" />
 					
 					
-				<small class="form-text">영문자 소문자로 시작하고 5~10 글자 이내로 입려하세요</small>
+				<small class="form-text">영문자 소문자로 시작하고 5~10 글자 이내로 입력하세요</small>
 				<div class="valid-feedback">사용가능한 아이디입니다츄...</div>
 				<div class="invalid-feedback">사용할수없는 아이디 입니다.</div>
 			</div>
 			
 			<div class="mb-2">
 				<label class="form-label" for="pwd">비밀번호</label>
-				<input v-model="pwd" 
-				@input="onPwdInput" :class="{'is-valid': isPwdValid, 'is-invalid': !isPWdValid && isPwdDirty}" 
-				class="form-control" type="password" name="pwd" id="pwd"/>
-				
+				<input v-model="pwd"
+					@input="onPwdInput"
+					:class="{'is-valid':isPwdValid,'is-invalid':!isPwdValid && isPwdDirty}" 
+					class="form-control" type="password" name="pwd" id="pwd"/>
 				<small class="form-text">특수 문자를 하나 이상 조합하세요.</small>
 				<div class="invalid-feedback">비밀 번호를 확인 하세요</div>
 			</div>
 			<div class="mb-2">
 				<label class="form-label" for="pwd2">비밀번호 확인</label>
 				<input v-model="pwd2"
-				@input="onPwdInput" :class="{'is-valid': isPwdValid, 'is-invalid': !isPWdValid && isPwdDirty}" 
-				 class="form-control" type="password"  id="pwd2"/>
-				 
-			</div>
+					@input="onPwdInput" 
+					class="form-control" type="password"  id="pwd2"/>
+			</div>	
+			
 			<div class="mb-2">
 				<label class="form-label" for="email">이메일</label>
 				<input @input="onEmailInput"
@@ -119,21 +119,22 @@
 				},//이메일인풋
 				onPwdInput(e){
 					this.isPwdDirty=true;
-				
-					//비밀번호를 검증할 정규표현식객체
+					//비밀 번호를 검증할 정규 표현식(특수문자 포함여부)
 					const reg_pwd=/[\W]/;
-					
-					if(!reg_pwd.test(this.pwd) || !reg_pwd.test(this.pwd2)){
+					//일단 정규표현식을 만족하는지 확인해서 만족하지 않으면 함수를 여기서 종료
+					//만일 첫번째 비밀번호가 정규표현식을 통과하지 못하거나 또는 두번째 비밀번호가 정규표현식을 통과하지 못한다면
+					if( !reg_pwd.test(this.pwd) || !reg_pwd.test(this.pwd2) ){
 						this.isPwdValid=false;
 						return;
 					}
-					
-					if(this.pwd==this.pwd2){
+					//위를 통과 했다면 여기서는 비밀번호가 같은지 여부를 알아내서 유효성 여부에 반영한다.
+					if(this.pwd == this.pwd2){
+						//비밀번호가 유효 하다는 의미에서 true 를 넣어준다.
 						this.isPwdValid=true;
 					}else{
+						//비밀번호가 유효 하지 않다는 의미에서 false 를 넣어준다.
 						this.isPwdValid=false;
 					}
-					
 				}//여기까지
 			}
 		});

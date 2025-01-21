@@ -17,6 +17,7 @@
 	$("#getBtn").click(()=>{
 		$.ajax({
 			url:"friends.jsp",  //어디에요청
+			//url경로는 ${pageContext.request.contextPath} 안된다//jsp가 해석하는EL인데, 여기는 html페이지
 			method:"get", //어떤방식으로 요청
 			success:(res)=>{ //응답되는내용이 ()여기에 담아진다.
 				//res는 친구 이름이 담긴 배열이다.
@@ -26,7 +27,6 @@
 					//반복 횟수 만큰 li요소를 만들고 이름을 출력하고 id가 list 요소의 자식요소로 추가한다.
 					$("<li>").text(res[i]).appendTo("#list")
 				}
-
 			}
 		});
 		

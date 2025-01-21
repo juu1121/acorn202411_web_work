@@ -14,5 +14,6 @@ pw.println("문자열: "+msg);
 </head>
 <body>
 	<h1>test.jsp페이지</h1>
+	<h1>테스트</h1>
 </body>
 </html>
