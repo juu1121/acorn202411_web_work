@@ -4,38 +4,43 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<title>네비바 푸터</title>
+<%--포토라마 --%>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/include/jquery_plugin/css/fotorama.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"> </script>
+    <script src="${pageContext.request.contextPath}/include/jquery_plugin/js/fotorama.js"></script>
+    
+<%-- 부트스트랩로딩 --%>
+<jsp:include page="/include/resource.jsp"></jsp:include>
+>>>>>>> branch 'master' of https://github.com/juu1121/acorn202411_web_work.git
 </head>
-<body>
-
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Navbar</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
 
+<body class="d-flex flex-column min-vh-100">
+	<div class="main flex-grow-1"> <%-- 푸터를 제외한 내용을 감싼div --%>
+	
+		<%-- 네비바 --%>
+		<jsp:include page="/include/navbar.jsp">
+			<jsp:param value="index" name="current"/>
+		</jsp:include>
+		
+		<div class="container" >
+			<h1>이미지 슬라이더</h1>
+			 <div class="d-flex justify-content-center">
+				<div class="fotorama" data-allowfullscreen="true"  data-autoplay="true" data-keyboard="true"  data-nav="thumbs"  >
+					<img src="include/img/top06.jpg" />
+					<img src="include/img/top07.jpg" />
+					<img src="include/img/top08.jpg" />
+				</div>
+			</div>
+		</div>
+			
+	</div>
+	
+	<%-- 푸터 --%>
+	<jsp:include page="/include/footer.jsp"/>
 
 </body>
 </html>
