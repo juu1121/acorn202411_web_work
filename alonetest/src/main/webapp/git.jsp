@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>수요일에 이걸확인하기를..</title>
+<title>250123 목요일오전 이걸 받을수있을까?!</title>
 </head>
 <body>
 
