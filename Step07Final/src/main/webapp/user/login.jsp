@@ -1,3 +1,4 @@
+<%@page import="java.net.URLEncoder"%>
 <%@page import="test.user.dto.SessionDto"%>
 <%@page import="test.user.dao.UserDao"%>
 <%@page import="test.user.dto.UserDto"%>
@@ -26,6 +27,11 @@
 		}
 	
 	}
+	
+	//로그인후 가야할 목적지정보 (원래가려던목적지일수도있고, 인덱스일수도있다.)
+	String url=request.getParameter("url");
+	//로그인 실패를 대비해서 목적지 정보를 인코딩한 결과도 준비한다.
+	String encodedUrl=URLEncoder.encode(url, "UTF-8");
 	//일치하면 로그인 처리후 응답, 일치하지 않으면 일치하지 않는다고 응답
 %>
 <!DOCTYPE html>
@@ -39,12 +45,12 @@
 		<%if(isLoginSuccess){ %>
 			<p>
 				<strong><%=dto.getUserName() %></strong>님 로그인 되었습니다.
-				<a href="${pageContext.request.contextPath}/">확인</a>
+				<a href="<%=url%>">확인</a>
 			</p>
 		<%}else{ %>
 			<p>
 				아이디 혹은 비밀번호가 틀려요
-				<a href="${pageContext.request.contextPath}/user/login-form.jsp">다시 입력</a>
+				<a href="${pageContext.request.contextPath}/user/login-form.jsp?url=<%=encodedUrl %>">다시 입력</a>
 			</p>
 		<%} %>
 	</div>

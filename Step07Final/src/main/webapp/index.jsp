@@ -17,8 +17,9 @@
 				</p>
 			</c:when>
 			<c:otherwise>
-				<p>
-					<strong>${sessionDto.userName }</strong>님 로그인중...
+				<p>	
+					<%--개인정보(수정, 탈퇴등은 protected에 만들거임 ) --%>
+					<a href="${pageContext.request.contextPath}/user/protected/info.jsp">${sessionDto.userName }</a>님 로그인중...
 					<a href="${pageContext.request.contextPath }/user/logout.jsp">로그아웃</a>
 				</p>
 			</c:otherwise>
@@ -29,6 +30,7 @@
 			<li><a href="${pageContext.request.contextPath}/jstl/hello.jsp">JSTL 테스트</a></li>
 			<li><a href="${pageContext.request.contextPath}/user/signup-form.jsp">회원가입</a></li>
 			<li><a href="${pageContext.request.contextPath}/user/login-form.jsp">로그인</a></li>
+			<li><a href="${pageContext.request.contextPath}/member-only/play.jsp">놀러가기</a></li>
 		</ul>
 	</div>
 </body>
