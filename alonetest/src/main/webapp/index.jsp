@@ -14,7 +14,7 @@
     
 <%-- 부트스트랩로딩 --%>
 <jsp:include page="/include/resource.jsp"></jsp:include>
->>>>>>> branch 'master' of https://github.com/juu1121/acorn202411_web_work.git
+
 </head>
 
 
