@@ -59,7 +59,7 @@ public class LoginFilter implements Filter{
         }
 
         // 여기까지 실행의 흐름이 넘어오면 요청의 흐름을 계속 이어간다.
-        //여기서 원래 목적지로 간다.
+        //여기서 원래 목적지로 간다.(더 이상 개입 놉)
         chain.doFilter(request, response);
     }
 	//리다일렉트(요청을 새로운 경로로 다시 하라는 응답) 응답을 하는 메소드

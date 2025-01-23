@@ -32,6 +32,7 @@
 </head>
 <body>
 	<div class="container">
+		<a href="update-form.jsp">개인정보수정</a>
 		<h1>가입정보입니다.</h1>
 		<table>
 			<tr>
@@ -66,8 +67,12 @@
 			</tr>
 			<tr>
 				<th>가입일</th>
-				<td>${dto.updatedAt }</td>
+				<td>${dto.createdAt }</td>
 			</tr>
+			<tr>
+            	<th>수정일</th>
+            	<td>${dto.updatedAt }</td>
+        	 </tr>
 		</table>
 	</div>
 </body>

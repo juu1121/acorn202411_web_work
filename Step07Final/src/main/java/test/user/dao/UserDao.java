@@ -23,6 +23,81 @@ public class UserDao {
 		return dao;
 	}
 	
+	//이메일과 프로필 사진을 수정하는 메소드
+	public boolean updateEmailProfile(UserDto dto) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int rowCount = 0;
+		try {
+			conn = new DbcpBean().getConn();
+			//실행할 미완성의 sql 문
+			String sql = """
+				UPDATE users
+				SET email=?, profileImage=?, updatedAt=SYSDATE
+				WHERE num=?		
+			""";
+			pstmt = conn.prepareStatement(sql);
+			// ? 에 값을 여기서 바인딩한다.
+			pstmt.setString(1, dto.getEmail());
+			pstmt.setString(2, dto.getProfileImage());
+			pstmt.setLong(3, dto.getNum());
+			// sql 문 실행하고 변화된 row 의 갯수 리턴받기
+			rowCount = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+			}
+		}
+		if (rowCount > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	//이메일만 수정하는 메소드
+	public boolean updateEmail(UserDto dto) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int rowCount = 0;
+		try {
+			conn = new DbcpBean().getConn();
+			//실행할 미완성의 sql 문
+			String sql = """
+				UPDATE users
+				SET email=?, updatedAt=SYSDATE
+				WHERE num=?		
+			""";
+			pstmt = conn.prepareStatement(sql);
+			// ? 에 값을 여기서 바인딩한다.
+			pstmt.setString(1, dto.getEmail());
+			pstmt.setLong(2, dto.getNum());
+			// sql 문 실행하고 변화된 row 의 갯수 리턴받기
+			rowCount = pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (conn != null)
+					conn.close();
+				if (pstmt != null)
+					pstmt.close();
+			} catch (Exception e) {
+			}
+		}
+		if (rowCount > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public UserDto getData(String userName) {
 		UserDto dto=null;
 		
