@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>수요일에 이걸확인하기를..</title>
+<title>츙돌</title>
 </head>
 <body>
 
