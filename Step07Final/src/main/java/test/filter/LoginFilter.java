@@ -17,7 +17,7 @@ import test.user.dto.SessionDto;
  * 여긴 jsp가 아니니까, 리퀘스트.get세션 해서 http세션객체를 직접 얻어내야함
  * 원래 가려던 곳으로 보내는것도 잊지말아야 해 
 */
-@WebFilter({"/member-only/*", "/staff/*", "/admin/*", "/user/protected/*"}) //자바에서 배열은 중괄호
+@WebFilter({"/member-only/*", "/staff/*", "/admin/*", "/user/protected/*", "/post/protected/*"}) //자바에서 배열은 중괄호
 public class LoginFilter implements Filter{
 	
 	// @WebFilter()에 명시한 패턴의 요청을 하면 아래의 메소드가 호출된다.
