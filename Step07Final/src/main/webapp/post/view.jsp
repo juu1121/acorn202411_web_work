@@ -2,13 +2,28 @@
 <%@page import="test.post.dao.PostDao"%>
 <%@page import="test.post.dto.PostDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>]
+    pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%
+	//검색조건이 있는지 읽어와 본다.
+	String condition=request.getParameter("condition");
+	String keyword=request.getParameter("keyword");
+	String findQuery=null;
+	//있다면 dto 에 해당 정보를 담는다.
+	PostDto findDto=new PostDto();
+	if(condition != null){
+		//findDto=new PostDto();
+		findDto.setCondition(condition);
+		findDto.setKeyword(keyword);
+		findQuery="&condition="+condition+"&keyword="+keyword;
+	}
+
 	//자세히 보여줄 글의 번호를 읽어온다. 
 	int num=Integer.parseInt(request.getParameter("num"));
+	findDto.setNum(num);
+	
 	//DB 에서 해당 글의 정보를 얻어와서 
-	PostDto dto=PostDao.getInstance().getData(num);
+	PostDto dto=PostDao.getInstance().getData(findDto);
 	
 	//세션 아이디를 읽어와서 
 	String sessionId=session.getId();
@@ -22,6 +37,8 @@
 	}
 	
 	request.setAttribute("dto", dto);
+	request.setAttribute("findDto", findDto);
+	request.setAttribute("findQuery", findQuery);
 	//응답한다 
 %>
 <!DOCTYPE html>
@@ -53,6 +70,18 @@
 </head>
 <body>
 	<div class="container">
+		<c:if test="${dto.prevNum ne 0}">
+			<a href="view.jsp?num=${dto.prevNum}${findQuery}">이전글</a>
+		</c:if>
+		<c:if test="${dto.nextNum ne 0}">
+			<a href="view.jsp?num=${dto.nextNum}${findQuery}">다음글</a>
+		</c:if>
+		<c:if test="${not empty findDto.condition}">
+			<p>
+				<strong>${findDto.condition }</strong> 조건
+				<strong>${findDto.keyword }</strong>검색어로 검색된 내용 자세히보기
+			</p>
+		</c:if>
 		<h3>글 상세 보기</h3>
 		<table class="table table-bordered">
 			<tr>

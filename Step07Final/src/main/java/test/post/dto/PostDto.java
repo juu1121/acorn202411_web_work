@@ -11,7 +11,10 @@ public class PostDto {
 	//페이징 처리할때 필요한 필드
 	private int startRowNum;
 	private int endRowNum;
-	
+	private String condition; //검색조건 writer 또는 title 또는 title+content
+	private String keyword;	//검색 키워드
+	private long prevNum;	//이전글의 글번호
+	private long nextNum;	//다음글의 글번호
 	public long getNum() {
 		return num;
 	}
@@ -66,5 +69,32 @@ public class PostDto {
 	public void setEndRowNum(int endRowNum) {
 		this.endRowNum = endRowNum;
 	}
+	public String getCondition() {
+		return condition;
+	}
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+	public String getKeyword() {
+		return keyword;
+	}
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+	public long getPrevNum() {
+		return prevNum;
+	}
+	public void setPrevNum(long prevNum) {
+		this.prevNum = prevNum;
+	}
+	public long getNextNum() {
+		return nextNum;
+	}
+	public void setNextNum(long nextNum) {
+		this.nextNum = nextNum;
+	}
+	
+	
+
 	
 }
