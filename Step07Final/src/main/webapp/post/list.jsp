@@ -10,7 +10,8 @@
 	String condition=request.getParameter("condition");
 	String keyword=request.getParameter("keyword");
 	String findQuery=null;
-	//있다면 dto 에 해당 정보를 담는다. //검색조건과 키워드를 dto에 선택적으로 담을수도있고, 안 담을수도있다.
+	//검색조건이없다면, findQuery가 null인 상태로 if문 건너뛰고 아래쪽으로 내려간다!
+	//있다면 dto 에 해당 정보를 담는다. //즉, 검색조건과 키워드를 있고없고에 따라 dto에 선택적으로 담을수도있고, 안 담을수도있다.
 	PostDto dto=new PostDto();
 	if(condition != null){
 		dto.setCondition(condition);
@@ -59,7 +60,11 @@
 	
 	//보여줄 페이지에 해당하는 글 목록을 얻어온다.
 	List<PostDto> list=PostDao.getInstance().getList(dto); //검색조건이 들어있을수도 없을수도있는 dto를 메소드에 넘겨주면서 글 목록을 얻어낸다.
-	request.setAttribute("list", list);
+	/*
+		jsp페이지에서 응답에 필요한 데이터를 el에서 활용할수있도록 request객체에 특정 키값으로 담는다.
+		여기서 담아야 EL을 활용할수있어 // 어떤 key값으로 어떤 type을 담았는지 기억하기!
+	*/
+	request.setAttribute("list", list); //List<PostDto>
 	request.setAttribute("startPageNum", startPageNum);
 	request.setAttribute("endPageNum", endPageNum);
 	request.setAttribute("totalPageCount", totalPageCount);
@@ -90,7 +95,8 @@
 				</tr>
 			</thead>
 			<tbody>
-				<c:forEach var="post" items="${list}">
+				<%--list는 //List<PostDto> --%>
+				<c:forEach var="post" items="${list}"> 
 					<tr>
 						<td>${post.num}</td>
 						<td>${post.writer}</td>

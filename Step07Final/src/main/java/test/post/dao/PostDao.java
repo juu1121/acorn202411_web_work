@@ -208,6 +208,7 @@ public class PostDao {
 		return rowCount>0;
 	}
     
+	//이전글 다음글... 
 	public PostDto getData(PostDto dto) {
 	    PostDto data = null;
 
@@ -278,7 +279,7 @@ public class PostDao {
 	}
 
 	
-
+	//글번호 전달하면 글하나의 정보 
     public PostDto getData(long num) {
         PostDto dto = null;
 
