@@ -83,6 +83,7 @@
 <body>
 	<div class="container">
 		<a href="${pageContext.request.contextPath }/post/protected/new.jsp">새글 작성</a>
+		<a href="${pageContext.request.contextPath }/post/protected/new2.jsp">새글작성_새로운데이터시도</a>
 		<h1>게시글 목록 입니다</h1>
 		<table class="table table-striped">
 			<thead class="table-dark">
