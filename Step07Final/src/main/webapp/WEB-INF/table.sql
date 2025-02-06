@@ -33,3 +33,22 @@ CREATE TABLE readed_data(
 	num NUMBER REFERENCES posts(num),
 	session_id VARCHAR2(50)
 );
+
+-- 댓글의 정보 --
+CREATE TABLE comments(
+	num NUMBER PRIMARY KEY, -- 댓글의 글번호
+	writer VARCHAR2(100) NOT NULL, --작성자 //username
+	content VARCHAR2(200) NOT NULL, --내용
+	targetWriter VARCHAR2(100) NOT NULL, --댓글 대상자의 id (작성자, username) //댓글 단 원글의 작성자!(누구한테 댓글단건지 표시하려고)
+	postNum NUMBER NOT NULL, --원글의 글번호
+	parentNum NUMBER NOT NULL, --댓글의 그룹번호 //대댓글의 대빵번호! //그냥댓글일경우 글번호와같은데, 대댓글일경우 대빵의 글번호인듯 
+	deleted CHAR(3) DEFAULT 'no',
+	createdAt DATE
+);
+
+CREATE SEQUENCE comments_seq;
+-- --
+select * from comments WHERE postNum = 1
+ORDER BY parentNum DESC, num ASC
+
+
