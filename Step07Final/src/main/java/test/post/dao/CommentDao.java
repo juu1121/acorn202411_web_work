@@ -109,7 +109,7 @@ public class CommentDao {
        String sql = """
     		    SELECT * FROM (
     		        SELECT result1.*, ROWNUM AS rnum FROM (
-    		            SELECT num, writer, content, targetWriter, postNum, 
+    		            SELECT comments.num, writer, content, targetWriter, postNum, 
     		                   parentNum, deleted, comments.createdAt, profileImage
     		            FROM comments
     		            JOIN users ON comments.writer = users.userName
