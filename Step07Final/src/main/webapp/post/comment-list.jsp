@@ -1,3 +1,5 @@
+<%@page import="java.util.Map"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="com.google.gson.Gson"%>
 <%@page import="test.post.dao.CommentDao"%>
 <%@page import="java.util.List"%>
@@ -30,11 +32,27 @@
 	dto.setStartRowNum(startRowNum);
 	dto.setEndRowNum(endRowNum);
 	
+	
+	//전체 댓글의 갯수
+	int totalRow=CommentDao.getInstance().getCount(postNum);
+	//전체 페이지의 갯수 구하기
+	int totalPageCount=(int)Math.ceil(totalRow/(double)PAGE_ROW_COUNT);
+	
+	
 	//pageNum에 해당하는 댓글 목록을 얻어낸다.
 	List<CommentDto> list = CommentDao.getInstance().getList(dto);
+	//Gson 객체에 전달할 Map 객체를 구성한다.
+	Map<String, Object> map = new HashMap<>();
+	map.put("list", list);
+	map.put("totalPageCount", totalPageCount);
+	
 	Gson gson=new Gson();
 	
 // [{}, {}, {}] list는 대괄호로/dto는 중괄호로 바꿔서 응답된다.
+/* ===> 댓글불러오기때문에 변경 ... 아래같은형태가 나와야함..map을 전달하면 gson이 바꿔줄수있다! //dto를 전달하면 중괄호{}로 바꾸듯이 map도 바꿔준다!
+{ "list": [{}, {}, ,,,],
+  "totalPageCount":xxx}
+*/
 %>
-<%= gson.toJson(list) %>
+<%= gson.toJson(map) %>
 

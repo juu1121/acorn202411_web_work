@@ -79,6 +79,8 @@ public class CommentDto {
 	public void setEndRowNum(int endRowNum) {
 		this.endRowNum = endRowNum;
 	}
+
 	
+
 	
 }

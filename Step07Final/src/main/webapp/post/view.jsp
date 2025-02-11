@@ -220,7 +220,7 @@
 		<h4>댓글을 입력해 주세요</h4>
 		<!-- 원글에 댓글을 작성할 폼 -->	
 		<form class="comment-form" action="protected/comment-insert.jsp" method="post">
-			<!-- 원글의 글번호가 댓글의 postNum이 된다. -->
+			<!-- 원글의 글번호가 댓글의 postNum 이 된다. -->
 			<input type="hidden" name="postNum" value="${dto.num}"/>
 			<!-- 원글의 작성자가 댓글의 대상자가 된다. -->
 			<input type="hidden" name="targetWriter" value="${dto.writer}"/>
@@ -232,36 +232,69 @@
 			<ul>
 			
 			</ul>
+			<div class="more">
+				<button id="moreBtn">댓글 더보기</button>
+			</div>
 		</div>
 	</div>
 	<script>
+		let totalPageCount=0;
+		let currentPage=1;
+		
+		//더보기버튼이니까 refreshComments처럼 출력된내용을 지우면 안된다.
+		document.querySelector("#moreBtn").addEventListener("click", ()=>{
+			if(currentPage >= totalPageCount){
+				alert("댓글의 마지막 페이지입니다.");
+				return; //여기서 메소드끝
+			}
+			
+			//댓글페이지번호를 1증가시키고
+			currentPage++;
+			//해당페이지의 정보를 요청해서 받아온다.
+			//웹브라우저가 해석해야하는건 \역슬래시붙임. jsp가 해석해야하는건 EL앞에 역슬래시 안붙임
+			fetch(`comment-list.jsp?pageNum=\${currentPage}&postNum=${dto.num}`)
+			.then(res=>res.json())
+			.then(commentData=>{
+				//전체 페이지의 갯수
+				totalPageCount=commentData.totalPageCount;
+				//댓글 목록에 있는 댓글 정보 하나 하나를 참조하면서 
+				commentData.list.forEach(item=>{
+					//댓글 하나의 정보를 makeList 함수에 전달해서 댓글 정보가 출력된 li 를 얻어낸다.
+					const li = makeList(item);
+					//얻어낸 li 요소를 ul 에 추가한다.
+					document.querySelector(".comments ul").append(li);
+				});
+			});
+		});
+		
 		function refreshComments(){
-			//빈문자열을 넣어서, 출력된내용을 모두 지우고
+			//빈문자열을 넣어서, 출력된 내용을 모두 지우고 
 			document.querySelector(".comments ul").innerHTML="";
 			
 			//댓글 1page 내용을 fetch()를 이용해서 받아와서 ul에 넣는 코드
-			//댓글 1page 내용을 fetch()를 이용해서 받아온다. //페이지로딩시점에 1page내용은 출력이 되야하니까
+			//댓글 1page 내용을 fetch() 를 이용해서 받아온다. //페이지로딩시점에 1page내용은 출력이 되야하니까
 			fetch("comment-list.jsp?pageNum=1&postNum=${dto.num}")
 			.then(res=>res.json())
-			.then(list=>{
-				console.log(list);
+			.then(commentData=>{
+				//전체 페이지의 갯수
+				totalPageCount=commentData.totalPageCount;
 				//반복문돌면서 list를 이용해서 li여러개 만들기
-				//댓글 목록에 있는 댓글정보 하나 하나를 참조하면서 
-				list.forEach(item=>{
+				//댓글 목록에 있는 댓글 정보 하나 하나를 참조하면서 
+				commentData.list.forEach(item=>{
 					//item은 댓글하나의정보. 댓글하나의 정보를 makeList 함수에 전달해서 댓글 정보가 출력된 li를 얻어낸다.
+					//댓글 하나의 정보를 makeList 함수에 전달해서 댓글 정보가 출력된 li 를 얻어낸다.
 					const li = makeList(item);
-					//얻어낸 li요소를 ul에 추가한다.
-					document.querySelector(".comments ul").append(li);	
+					//얻어낸 li 요소를 ul 에 추가한다.
+					document.querySelector(".comments ul").append(li);
 				});
 				
-				addReplyListener(".reply-link");
+				
 			});
 		}
 		
 		refreshComments();
 
-		
-		
+	
 		//로그인된 사용자의 이름
 		const userName="${sessionDto.userName}";
 	
@@ -277,34 +310,55 @@
 				headers: { "Content-Type": "application/x-www-form-urlencoded" },
 				body:queryString //postNum=1&targetWriter=xxx  //폼에입력한내용을 이용해서 문자열얻어냄 
 			})
-			.then(res=>res.json()) 
+			.then(res=>res.json())
 			.then(comment=>{
 				//방법1) 새로운댓글을 추가했을때, li를이용해서 위에 추가하는방법
-				//새로 추가된 댓글정보를 이용해서 li를 만든다.
-				//const li = makeList(comment);
-				//만든 li를 댓글 목록의 가장 위에 출력한다.
+				//새로 추가된 댓글 정보를 이용해서 li 를 만든다.
+				//const li=makeList(comment);
+				//만든 li 를 댓글 목록의 가장 위에 출력한다. 
 				//document.querySelector(".comments ul").insertAdjacentElement("afterbegin", li);
-				
+			
 				//방법2) 댓글 1page내용을 다시 출력해준다.
 				refreshComments();
 				
 			});
 		});
 		
-		//함수 호출하면서 댓글 하나의 정보를 담고 있는 object를 전달하면 li 요소가 리턴된다.
+		//함수 호출하면서 댓글 하나의 정보를 담고 있는 object 를 전달하면 li 요소가 리턴된다.
 		function makeList(comment){
 			// li 요소를 만들어서 
 			const li = document.createElement("li");
 			li.classList.add(comment.num !== comment.parentNum ? "indent" : "not");
+			
+			//(comment.deleted == "yes") => 삭제된 댓글이라면(delete메소드는 댓글의 상태값만변경)
+			if(comment.deleted == "yes"){
+				li.innerHTML="<p>삭제된 댓글입니다.</p>"
+				//삭제된 댓글입니다가 출력된 li를 바로 리턴해준다.
+				return li;
+			}
+			
 			// 프로필 이미지 처리
-            const profileImage = comment.profileImage 
+            const profileImage = comment.profileImage  //profileImage 여기에 들어가는건 문자열 //프로필이미지가있냐 : 있으면 이미지로딩, 없으면 기본이미지  => 백티과삼항연산자사용
                 ? `<img class="profile-image" src="${pageContext.request.contextPath }/upload/\${comment.profileImage}" alt="Profile Image">`
                 : `<svg class="profile-image" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
                     <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
                 </svg>`;
-            //li 요소안에 dl 을 출력한다. 
+                
+            //수정 삭제 링크 처리  //로그인된유저와 작성자가 같으면 수정삭제링크를 조건을따라  보이게 함 //있으면보이게, 없으면 빈문자열 
+            const link = userName == comment.writer
+            	? `
+            		<a class="update-link" href="javascript:">수정</a>
+					<a class="delete-link" href="javascript:">삭제</a>
+            	` 
+            	: "";
+            
+            //li 요소안에 dl 을 출력한다. //여기 svg가 빨간색 화살표 //댓글의번호와 parentNum이 같으면 원글의댓글 다르면 대댓글 => 이걸로 inline으로할지 숨길지 결정 (reply-icon css에 none로 해놓음!) 
+            //sva style안에 출력되는건, display:inline 이거나 아무것도 출력되지않는다.
 			li.innerHTML=`
+				<svg style="\${comment.num != comment.parentNum ? 'display:inline' : ''}"  class="reply-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+	  				<path fill-rule="evenodd" d="M1.5 1.5A.5.5 0 0 0 1 2v4.8a2.5 2.5 0 0 0 2.5 2.5h9.793l-3.347 3.346a.5.5 0 0 0 .708.708l4.2-4.2a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 8.3H3.5A1.5 1.5 0 0 1 2 6.8V2a.5.5 0 0 0-.5-.5z"/>
+				</svg>
 				<dl>
 					<dt>
 						\${profileImage}
@@ -317,57 +371,123 @@
 						<!-- 답글 링크 -->
 						<a data-num="\${comment.num}" class="reply-link" href="javascript:">답글</a>
 						<!-- 로그인된 유저가 쓴 댓글일 경우 수정, 삭제 링크를 제공한다 -->
-						
+						\${link}
 					</dt>
 					<dd>
-						<pre id="content\${comment.num}">\${comment.content}</pre>
+						<!-- pre요소는 탭 공백 개행기호를 다 해석해주는 요소임(입력한 그대로 나온다는것_댓글의 내용!) -->
+						<pre>\${comment.content}</pre>
 					</dd>
 				</dl>
-				<!-- 댓글의 댓글 작성할 폼 미리 출력하기 -->
-				<form id="reForm\${comment.num}" class="re-insert-form"  method="post">
+				<!-- 댓글의 댓글 작성할 폼 미리 출력하기 //답글을 눌렀을때 보이게하기 -->
+				<form class="re-insert-form"  method="post">
 					<input type="hidden" name="postNum" value="${dto.num }"/>
 					<input type="hidden" name="targetWriter" value="\${comment.writer }"/>
 					<input type="hidden" name="parentNum" value="\${comment.parentNum }"/>
 					<textarea name="content"></textarea>
 					<button type="submit">등록</button>
-				</form>					
+				</form>
+				<!-- 댓글 수정폼 -->
+				<form  class="update-form"  method="post">
+					<input type="hidden" name="num" value="\${comment.num}"/>
+					<textarea name="content">\${comment.content}</textarea>
+					<button type="submit">수정확인</button>
+				</form>	
 			`;
+			
+			li.querySelector(".delete-link") && li.querySelector(".delete-link").addEventListener("click", (e)=>{
+				const isDelete=confirm("삭제하시겠습니까?");
+				if(isDelete){
+					fetch("protected/comment-delete.jsp?num="+comment.num)
+					.then(res=>res.json())
+					.then(data=>{
+						if(data.isSuccess){
+							//댓글이 있었던 자리에 "삭제된 댓글입니다"를 출력해준다.
+							li.innerHTML="<p>삭제된 댓글입니다.</p>";
+						}
+					});
+				}
+			});
+			
+			li.querySelector(".update-form").addEventListener("submit", (e)=>{
+				//폼 제출을 막은 다음 
+				e.preventDefault();
+				//submit 이벤트가 일어난 form 의 참조값을 form 이라는 변수에 담기 
+				const form=e.target;
+				//폼에 입력된 전송할 내용을 query 문자열 형식으로 얻어내기
+				const queryString=new URLSearchParams(new FormData(form)).toString();
+				fetch("protected/comment-update.jsp", {
+					method:"POST",
+					headers:{"Content-Type":"application/x-www-form-urlencoded; charset=utf-8"},
+					body:queryString
+				})
+				.then(res=>res.json())
+				.then(data=>{
+					if(data.isSuccess){
+						//수정된 댓글 내용을 pre요소에 출력
+						//수정폼에서 name="content"인 요소의 value값을 pre에 출력
+						li.querySelector("pre").innerText=form.content.value;
+						//form 숨기기
+						form.style.display="none";
+						//링크 내용 수정
+						li.querySelector(".update-link").innerText="수정";
+					}
+				})
+			});
+			
+			//자바스크립트에서는 데이터가 존재하면 true로, null이면 false로 간주 => 데이터가 존재한다면 우측을 보는것!
+			//li.querySelector(".update-link")가 null 이 아니라면 && 다음을 보는것!
+			li.querySelector(".update-link") && li.querySelector(".update-link").addEventListener("click", (e)=>{
+				//수정폼의 참조값
+				const form=li.querySelector(".update-form");
+				//눌러진 링크의 innerText읽어오기
+				const currentText=e.target.innerText;
+				if(currentText === "수정"){
+					//보이게 하기 
+					form.style.display="flex";
+					e.target.innerText="수정취소";
+				}else if(currentText === "수정취소"){
+					form.style.display="none";
+					e.target.innerText="수정";
+				}	
+				
+			})
+			
+			<!-- document.querySelector : 문서전체가 로딩한 문서에서 찾는것 //li.querySelector은 li요소에서 찾는것! -->
+			li.querySelector(".reply-link").addEventListener("click", (e)=>{
+				//보여주거나 숨길 form 의 참조값 얻어내기 
+				const form=li.querySelector(".re-insert-form");
+				//눌러진 링크의 innerText 읽어오기
+				const currentText=e.target.innerText;
+				if(currentText === "답글"){
+					//보이게 하기 
+					form.style.display="flex";
+					e.target.innerText="취소";
+				}else if(currentText === "취소"){
+					form.style.display="none";
+					e.target.innerText="답글";
+				}	
+			});
+			li.querySelector(".re-insert-form").addEventListener("submit", (e)=>{
+				e.preventDefault();
+				//폼에 작성된 내용을 이용해서 query 문자열을 얻어낸다. 
+				const formData=new FormData(e.target);
+				const queryString = new URLSearchParams(formData).toString();
+				// fetch() 함수를 이용해서 댓글 정보를 페이지 전환 없이 서버에 전송한다.
+				fetch("protected/comment-insert.jsp",{
+					method:"POST",
+					headers: { "Content-Type": "application/x-www-form-urlencoded" },
+					body:queryString
+				})
+				.then(res=>res.json())
+				.then(comment=>{
+					//댓글 1page 내용을 다시 출력해준다.
+					refreshComments();
+				});
+			});
+			
 			return li;
 		}
 		
-		function addReplyListener(selector){
-			
-			//답글 링크에 대한 처리 
-			const replyLinks=document.querySelectorAll(selector);
-			//반복문 돌면서 모든 링크에 이벤트 리스너 함수 등록하기 
-			for(let i=0; i<replyLinks.length; i++){
-				
-				replyLinks[i].addEventListener("click", (e)=>{
-					/*
-					if(!isLogin){
-							e.preventDefault();//폼 전송 막기
-							alert("로그인이 필요 합니다");
-							location.href="${pageContext.request.contextPath }/user/login-form.jsp";
-					}
-					*/
-					//클릭한 a 요소의 data-num 속성의 value 값을 읽어온다. 
-					const num=e.target.getAttribute("data-num");
-					//보여주거나 숨길 form 의 참조값 얻어내기 
-					const form=document.querySelector("#reForm"+num);
-					//눌러진 링크의 innerText 읽어오기
-					const currentText=e.target.innerText;
-					if(currentText === "답글"){
-						//보이게 하기 
-						form.style.display="flex";
-						e.target.innerText="취소";
-					}else if(currentText === "취소"){
-						form.style.display="none";
-						e.target.innerText="답글";
-					}	
-				});
-			}
-		}
-
 	</script>
 </body>
 </html>
