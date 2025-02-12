@@ -9,6 +9,8 @@
 <%
 	// /post/comment-list.jsp  -> 댓글목록을 json으로 응답할예정
 	
+	Thread.sleep(1000); //spinner 테스트를 위해 응답시간을 1초 지연시킨다.
+	
 	//댓글의 페이지 번호
 	int pageNum=Integer.parseInt(request.getParameter("pageNum"));
 	//원글의 글번호
