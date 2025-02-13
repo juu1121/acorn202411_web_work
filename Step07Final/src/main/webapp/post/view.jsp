@@ -450,7 +450,7 @@
 				        	</div>
 					    </div>
 					
-					    <!-- 답글, 수정, 삭제 버튼 -->
+					    <!-- 답글, 수정, 삭제 버튼 (로그인된 유저가 쓴 댓글일 경우 수정, 삭제 링크를 제공) -->
 					    <div class="comment-actions">
 					        <a class="reply-link" href="javascript:">답글</a>
 					        \${link}
@@ -458,10 +458,11 @@
 					</dt>
 
 					<dd>
+						<!-- pre요소는 탭 공백 개행기호를 다 해석해주는 요소임(입력한 그대로 나온다는것_댓글의 내용!) -->
 						<pre>\${comment.content}</pre>
 					</dd>
 				</dl>
-				<!-- 댓글의 댓글 작성할 폼 미리 출력하기 -->
+				<!-- 댓글의 댓글 작성할 폼 미리 출력하기 //답글을 눌렀을때 보이게하기-->
 				<form class="re-insert-form"  method="post">
 					<input type="hidden" name="postNum" value="${dto.num }"/>
 					<input type="hidden" name="targetWriter" value="\${comment.writer }"/>
@@ -523,7 +524,7 @@
 				})
 			});
 			
-			
+			//자바스크립트에서는 데이터가 존재하면 true로, null이면 false로 간주 => 데이터가 존재한다면 우측을 보는것!
 			// li.querySelector(".update-link") 가 null 이 아니라면
 			li.querySelector(".update-link") && li.querySelector(".update-link").addEventListener("click", (e)=>{
 				//수정폼의 참조값
@@ -540,6 +541,7 @@
 				}	
 			})
 			
+			<!-- document.querySelector : 문서전체가 로딩한 문서에서 찾는것 //li.querySelector은 li요소에서 찾는것! -->
 			li.querySelector(".reply-link").addEventListener("click", (e)=>{
 				if(!isLogin){
 					alert("로그인 페이지로 이동합니다");
