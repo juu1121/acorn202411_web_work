@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="container">
+		<h1>인덱스 페이지 입니다.</h1>
+		<ul>
+			<li><a href="/spring02/hello">Hello Spring Boot!</a></li>
+			<li><a href="/spring02/fortune">오늘의 운세!</a></li>
+		</ul>
+		
+		<form action="/spring02/send" method="post">
+			<input type="text" name="msg" placeholder="할말입력" />
+			<button type="submit">전송</button>
+		</form>
+		<form action="/spring02/send2" method="post">
+			<input type="text" name="msg" placeholder="할말입력" />
+			<button type="submit">전송</button>
+		</form>
+	</div>
+</body>
+</html>
