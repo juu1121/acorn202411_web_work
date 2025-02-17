@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>/templates/test/sequence.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>원하는 범위의 숫자 얻어내서 활용하기</h1>
+		<h2>1~5 까지</h2>
+		<p>
+			<strong th:each="tmp : ${#numbers.sequence(1,5)}">[[${tmp}]]</strong>
+		</p>
+		<h2>1~10 까지 2씩 증가 시키면서</h2>
+		<ul>
+			<li th:each="tmp:${#numbers.sequence(1,10,2)}">[[${tmp}]]</li>
+		</ul>
+	</div>
+</body>
+</html>
