@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>templates/todo/insert.html</title>
+</head>
+<body>
+	<div class="container">
+		<h3>알림</h3>
+		<p>
+			<strong th:text="${param.content}"></strong> 리스트가 저장되었습니다 
+			<a th:href="@{/todo/list}">확인</a>
+		</p>
+	</div>
+</body>
+</html>

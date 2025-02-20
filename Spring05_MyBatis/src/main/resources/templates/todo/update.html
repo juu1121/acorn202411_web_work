@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>templates/todo/update.html</title>
+</head>
+<body>
+	<script th:inline="javascript">
+		alert(/*[[${param.id} + ' 번호의 list를 수정했습니다']]*/);
+		location.href=/*[[@{/todo/list}]]*/ "";	
+	</script>
+</body>
+</html>

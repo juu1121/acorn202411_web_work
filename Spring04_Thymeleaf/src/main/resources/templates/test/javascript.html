@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>/templates/test/javascript.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>javascript영역에서 thymeleaf 사용</h1>
+	</div>
+	<script>
+		//let isLogin = false;
+//		let isLogin = [[${isLogin}]];
+//		let age = [[${age}]];
+//		let name = "[[${name}]]";	
+//		let mem={ num : [[${dto.num}]] };
+		
+	</script>
+	<!-- /*
+		- javascript에서 Thymeleaf변수에 들어 있는 값을 편하게 사용할수있도록 도와준다.
+		
+		template페이지에 전달된 Model데이터를 이용해서 
+		클라이언트 웹 브라우저에서 해석할 javascript를 출력할떄 사용하면 편리하다
+		default 값도 설정할수있다 //값이 없는경우 찍힌다
+		String type은 ""로 감싸주고
+		Dto나 Map은 {} object로 만들어주고
+		List는 [] array로 만들어준다.
+	*/ -->
+	<script th:inline="javascript">
+		let isLogin2=/*[[${isLogin}]]*/ false;
+		let age2 = /*[[${age}]]*/ 0;
+		let name2 = /*[[${name}]]*/ "";
+		let mem2 = /*[[${dto}]]*/ {};
+		let list = /*[[${list}]]*/ [];
+	</script>
+</body>
+</html>

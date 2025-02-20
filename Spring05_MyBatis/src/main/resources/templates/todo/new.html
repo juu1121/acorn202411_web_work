@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>templates/todo/new.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>todolist 추가양식</h1>
+		<form th:action="@{/todo/insert}" method="post">
+			<input type="text" name="content" placeholder="내용 입력..."/>
+			<button type="submit">추가</button>
+		</form>
+	</div>
+</body>
+</html>

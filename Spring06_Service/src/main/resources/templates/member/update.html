@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>/templates/member/update.html</title>
+</head>
+<body>
+	<!--/*  
+		<script>
+			alert("[[${param.name}]] 님의 정보를 수정했습니다.");
+			location.href="[[@{/member/list}]]";
+		</script>
+	*/-->
+	
+	<script th:inline="javascript">
+		
+		alert(/*[[${param.name} + ' 님의 정보를 수정했습니다']]*/);
+		location.href=/*[[@{/member/list}]]*/ "";
+		
+	</script>
+</body>
+</html>

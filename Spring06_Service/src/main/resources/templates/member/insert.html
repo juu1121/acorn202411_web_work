@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>/templates/member/insert.html</title>
+</head>
+<body>
+	<div class="container">
+		<h3>알림</h3>
+		<p>
+			<!-- /*폼전송된 파라미터 읽어내기 param.으로 */ -->
+			<strong th:text="${param.name}"></strong>님의 정보가 저장되었습니다 
+			<a th:href="@{/member/list}">확인</a>
+		</p>
+	</div>
+</body>
+</html>
