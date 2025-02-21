@@ -4,14 +4,61 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.example.spring08.util.Messenger;
+import com.example.spring08.util.WritingUtil;
+
+import jakarta.annotation.PostConstruct;
 
 @SpringBootApplication
 public class Spring08JavaApplication {
+	
+	@Autowired
+	private WritingUtil util;
+	
+	@Autowired
+	private Messenger messenger;
+	
+	// Spring08JavaApplication클래스로 객체가 생성된 이후 이 메소드 호출
+	@PostConstruct //Spring08JavaApplication가 생성된 이후(스프링프레임워크가 준비 된 이후) 이 메소드가 자동호출
+	public void testAop() {
+		messenger.sendGreeting("안농농");
+		messenger.sendGreeting("똥깨");
+		
+		String result = messenger.getMessage();
+		System.out.println("result:"+result);
+		
+		util.writeLetter();
+		util.writeReport();
+		util.writeDiary();
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(Spring08JavaApplication.class, args);
+		
+		String pwd ="1234";
+		
+		//비밀번호를 암호화 해주는 객체
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		//암호화된 비밀번호 얻어내기
+		String encodedPwd = encoder.encode(pwd);
+		//결과를 콘솔창에 출력
+		System.out.println("--------------------");
+		System.out.println(pwd+"를 암호화 하면 : "+encodedPwd);
+		
+		//날것의 비밀번호와 암호화된 비밀번호가 일치하는지 여부 알아내기 
+		boolean isValid = BCrypt.checkpw("1234", encodedPwd);
+		System.out.println("일치하는지 여부:"+isValid);
+		
+		boolean isValid2 = BCrypt.checkpw("54321", encodedPwd);
+		System.out.println("일치하는지 여부:"+isValid2);
+		
+		
 		//of() 메소드로 만든 List는 읽기전용(Read Only)이다._사이즈변경도 불가능
 		List<String> names=List.of("김구라", "해골", "원숭이");
 		//names.add("주뎅이"); //동작하지않는다 (예외 발생)
@@ -61,5 +108,7 @@ public class Spring08JavaApplication {
 		System.out.println(intNums2);		
 	
 	}
+	
+
 
 }

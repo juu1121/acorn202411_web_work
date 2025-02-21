@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	<sql id="columnName">
+		num, userName, password, email, profileImage, role, updatedAt, createdAt
+	</sql>
+
+	<insert id="insert" parameterType="com.example.spring10.dto.UserDto">
+		INSERT INTO users
+		(num, userName, password, email)
+		VALUES(users_seq.NEXTVAL, #{userName}, #{password}, #{email})
+	</insert>
+	
+	<select id="getByNum" parameterType="long" resultType="com.example.spring10.dto.UserDto">
+		SELECT <include refid="columnName" />
+		FROM users
+		WHERE num=#{num}
+	</select>
+	
+	<select id="getByUserName" parameterType="string" resultType="com.example.spring10.dto.UserDto">
+		SELECT <include refid="columnName" />
+		FROM users
+		WHERE userName=#{userName}	
+	</select>
+</mapper>

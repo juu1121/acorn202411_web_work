@@ -41,7 +41,7 @@ public class FileController {
 			encodedName=encodedName.replaceAll("\\+"," ");
 			//응답 헤더정보(스프링 프레임워크에서 제공해주는 클래스) 구성하기 (웹브라우저에 알릴정보)
 			HttpHeaders headers=new HttpHeaders();
-			//파일을 다운로드 시켜 주겠다는 정보
+			//파일을 다운로드 시켜 주겠다는 정보 //octet-stream 파일을 전송하는 특별한 의미를가진 형식..!(서버가 클라이언트한테, body에 있는 정보를 전달!=>이게 다운로드임!)
 			headers.add(HttpHeaders.CONTENT_TYPE, "application/octet-stream"); 
 			//파일의 이름 정보(웹브라우저가 해당정보를 이용해서 파일을 만들어 준다)
 			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+encodedName);
@@ -85,16 +85,24 @@ public class FileController {
 		
 		//원본파일명
 		String orgFileName=myFile.getOriginalFilename();
+		System.out.println("orgFileName: "+ orgFileName);
 		//파일의크기
 		long fileSize = myFile.getSize();
+		System.out.println("fileSize: "+ fileSize);
+		
 		//저장할 파일의 이름을 Universal Unique 한 문자열로 얻어내기
 		String saveFileName=UUID.randomUUID().toString();
+		System.out.println("saveFileName: "+ saveFileName);
+		
 		//저장할 파일의 전체경로 구성하기
 		String filePath=fileLocation+File.separator+saveFileName;
+		System.out.println("filePath: "+ filePath);
+		
 		try {
 			//업로드 된 파일을 저장할 파일 객체 생성
-			File saveFile=new File(filePath);
-			myFile.transferTo(saveFile);
+			File saveFile=new File(filePath); //
+			myFile.transferTo(saveFile); //업로드된파일을 saveFile에 저장?
+			//MultipartFile.transferTo(File dest) 메서드는 MultipartFile 객체로 업로드된 파일을 지정된 위치(dest)로 저장하는 기능
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
