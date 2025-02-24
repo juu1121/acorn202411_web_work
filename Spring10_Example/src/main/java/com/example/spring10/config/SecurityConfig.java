@@ -23,7 +23,7 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
 		//spring security가 인증과정을 거치지 않는 요청경로
 		String[] whiteList= {"/", "/play", "/user/loginform", "/user/login-fail", "/user/expired",
-				"/user/signup-form", "/user/signup", "/user/checkid"};
+				"/user/signup-form", "/user/signup", "/user/checkid", "/upload/**"};
 		
 		httpSecurity
 		.csrf(csrf->csrf.disable())

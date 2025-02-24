@@ -5,8 +5,11 @@ import java.io.IOException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.event.EventListener;
 
+//파일 업로드 위치 정보를 가지고 ㅣㅇㅆ는 custom.properties 파일을 로딩시키기 위한 어노테이션
+@PropertySource(value="classpath:custom.properties") //내가 설정한 properties문서를 스프링부트가 읽는다.
 @SpringBootApplication
 public class Spring10ExampleApplication {
 
