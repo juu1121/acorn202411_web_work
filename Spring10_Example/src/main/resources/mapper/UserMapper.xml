@@ -4,6 +4,12 @@
 	<sql id="columnName">
 		num, userName, password, email, profileImage, role, updatedAt, createdAt
 	</sql>
+	
+	<update id="updatePassword" parameterType="com.example.spring10.dto.UserDto">
+		UPDATE users
+		SET password=#{newPassword}
+		WHERE userName = #{userName}
+	</update>
 
 	<insert id="insert" parameterType="com.example.spring10.dto.UserDto">
 		INSERT INTO users

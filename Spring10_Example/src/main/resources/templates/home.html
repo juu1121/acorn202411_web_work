@@ -9,7 +9,7 @@
 		<div sec:authorize="isAuthenticated()">
 			<strong sec:authentication="name"></strong> 님 로그인중
 			<br>
-			<strong>[[${#authentication.principal.username}]]</strong> 님 로그인중
+			<a th:href="@{/user/info}">[[${#authentication.principal.username}]]</a> 님 로그인중
 			<br>
 			<a th:href="@{/user/logout}">로그아웃</a>
 		</div>

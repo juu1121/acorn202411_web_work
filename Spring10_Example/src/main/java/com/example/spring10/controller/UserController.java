@@ -1,24 +1,71 @@
 package com.example.spring10.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.spring10.dto.UserDto;
 import com.example.spring10.service.UserService;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class UserController {
 	
 	@Autowired private UserService service;
 	
+	@PostMapping("/user/update-password")
+	public String updatePassword(UserDto dto, HttpSession session) {
+		//서비스를 이용해서 비밀번호를 수정하고
+		service.changePassword(dto);
+		//로그아웃처리
+		session.invalidate();
+		return "user/update-password";
+	}
+	
+	@GetMapping("/user/edit-password")
+	public String editPassword() {
+		return "user/edit-password";
+	}
+	
+	
+	@GetMapping("/user/info")
+	public String info(Model model) {
+		//로그인되어있는 userName얻어내기
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		//로그인된 userName을 이용해서 사용자 정보를 얻어와서 
+		UserDto dto = service.getByUserName(userName);
+		//dto라는 키값으로 담고 
+		model.addAttribute("dto", dto);
+		// view Page에서 응답하기
+		return "user/info";
+	}
+	
+	//사용가능한 아이디인지 여부를 json문자열로 응답하기
+	@ResponseBody
+	@GetMapping("/user/checkid")
+	public Map<String, Boolean> checkid(String userName){
+		// get방식 파라미터로 전달되는 userName을 이용해서 UserDto를 얻어와본다.
+		UserDto dto = service.getByUserName(userName);
+		//dto가 null이면 사용가능(true)
+		boolean canUse = dto == null ? true : false;
+		// Map객체에 사용가능 여부를 담아서 리턴한다.
+		Map<String, Boolean> map = Map.of("canUse", canUse);
+		return map;
+	}
+	
 	//회원 가입 요청 처리
 	@PostMapping("/user/signup")
 	public String signup(UserDto dto) {
 		//서비스를 이용해서 회워가입 처리를 한다.
-		service.save(dto);
+		service.createUser(dto);
 		return "user/signup";
 	}
 	

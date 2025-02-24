@@ -7,6 +7,6 @@ public interface UserDao {
 	public UserDto getData(long num);
 	public UserDto getData(String userName);
 	public int insert(UserDto dto);
-	public int updatePwd(UserDto dto);
+	public int updatePassword(UserDto dto);
 	public int update(UserDto dto);
 }

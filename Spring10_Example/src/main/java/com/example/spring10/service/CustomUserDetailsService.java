@@ -31,6 +31,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 		//원래는 DB에서 dao를 이용해 username에 해당하는 사용자정보(UserDto)를 얻어와야 한다.
 		UserDto dto = dao.getData(username);
 		
+		//만일 존재하지 않는 사용자라면 
+		if(dto==null) {
+			throw new UsernameNotFoundException("존재 하지 않는 사용자 입니다.");
+		}
+		
 		//권한 목록을 List 에 담아서  (지금은 1개 이지만)
 		List<GrantedAuthority> authList=new ArrayList<>();
 		authList.add(new SimpleGrantedAuthority(dto.getRole()));
