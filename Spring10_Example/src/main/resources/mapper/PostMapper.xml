@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="post">
+	
+	<sql id="column">
+		num, writer, title, content, viewCount, updatedAt, createdAt
+	</sql>
+	
+	<sql id="search">
+		<choose>
+			<when test="condition == 'writer'">
+				WHERE writer LIKE '%' || #{keyword} || '%'
+			</when>
+			<when test="condition == 'title'">
+				WHERE title LIKE '%' || #{keyword} || '%'
+			</when>
+			<when test="condition == 'title_content'">
+				WHERE title LIKE '%' || #{keyword} || '%' OR content LIKE '%' || #{keyword} || '%'
+			</when>
+		</choose>		
+	</sql>
+	
+	<select id="getCount" parameterType="postDto" resultType="int">
+		SELECT NVL(MAX(ROWNUM), 0)
+		FROM posts
+		<include refid="search" />
+	</select>
+	
+	<insert id="insert" parameterType="postDto">
+		INSERT INTO posts
+		(num, writer, title, content)
+		VALUES(posts_seq.NEXTVAL, #{writer}, #{title}, #{content})
+	</insert>
+	
+	<update id="update" parameterType="postDto">
+		UPDATE posts
+		SET title=#{title}, content=#{content}, updatedAt=SYSDATE
+		WHERE num=#{num}
+	</update>
+	
+	<delete id="delete" parameterType="long">
+		DELETE FROM posts
+		WHERE num=#{num}
+	</delete>
+
+	<select id="getList" parameterType="postDto" resultType="postDto">
+		SELECT *
+		FROM
+			(SELECT result1.*, ROWNUM AS rnum
+			FROM
+				(SELECT <include refid="column"/>
+				FROM  posts
+				<include refid="search" />
+				ORDER BY num DESC) result1)
+		WHERE rnum BETWEEN #{startRowNum} AND #{endRowNum}		
+	</select>
+	
+		
+</mapper>
+
