@@ -38,6 +38,13 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
         //Authentication 객체의 메소드를 이용해서 지금 로그인된 사용자에 대한 자세한 정보를 얻어낼수 있다.
         String userName=authentication.getName();  //authentication.getName() => 로그인된 username알수있다.
         System.out.println("로그인된 사용자:"+userName);
+        
+        // 로그인된 userName을 session영역에 담아놓으면 jsp or thymeleaf에서 편리하게 사용할수있다.
+        // jsp => ${sessionScope.userName} or ${userName}
+        // thymeleaf => ${session.userName} 
+        // 으로 userName을 추출할수있다.
+        session.setAttribute("userName", userName);
+        
 		
 		//3. 로그인 성공이후 미리 저장된 요청이 있었는지 읽어와서  //로그인하고 원래 가려던곳으로 가야하니까 필요!
     	SavedRequest cashed=requestCache.getRequest(request, response);

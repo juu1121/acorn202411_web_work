@@ -7,6 +7,18 @@
 </head>
 <body>
 	<div class="container">
+		<!-- 테스트를 위한 임시데이터였던것
+		<p>[[|번호:${num} 이름:${name}|]]</p>
+		<p th:text="|번호:${num} 이름:${name}|"></p>
+		 
+		<a th:href="@{/study?num=${num}}">num이 참조되지않는 테스트링크_잘못된거임! //</a>
+		<a th:href="@{'/study?num='+${num}}">싱글따옴표로 감싸서, 문자데이터로만들기</a>
+		<a th:href="@{'/study?num='+${num}+'&name='+${name}}">싱글따옴표로 감싸서, 문자데이터로만들어서 -> 연결</a>
+		<a th:href="@{/study(num=${num},name=${name})}">get방식파라미터는, 소괄호사용 + 특수문자url인코딩이 자동</a>
+		<a th:href="@{|/study?num=${num}&name=${name}|}">||파이프로 감싸기</a>
+		<br /> 
+		-->
+		
 		<a th:href="@{/post/new}">새글 작성</a>
 		<h1>게시글 목록 입니다</h1>
 		<table class="table table-striped">
@@ -16,6 +28,7 @@
 					<th>작성자</th>
 					<th>제목</th>
 					<th>조회수</th>
+					<th>수정일</th>
 					<th>등록일</th>
 				</tr>
 			</thead>
@@ -27,18 +40,23 @@
 						<a th:href="@{|view?num=${post.num}${dto.findQuery}|}">[[${post.title}]]</a>
 					</td>
 					<td>[[${post.viewCount}]]</td>
+					<td>[[${post.updatedAt}]]</td>
 					<td>[[${post.createdAt}]]</td>
 				</tr>
 			</tbody>
 		</table>
-		<nav>
+		<nav> <!-- ne는 !=   -->
             <ul class="pagination" th:if="${dto.totalPageCount ne 0}">
+            	<!-- 이전 Prev -->
                 <li th:if="${dto.startPageNum ne 1}" class="page-item">
                     <a class="page-link" th:href="@{|/post/list?pageNum=${dto.startPageNum - 1}${dto.findQuery}|}">Prev</a>
                 </li>
+                
                 <li th:each="i : ${#numbers.sequence(dto.startPageNum, dto.endPageNum)}" class="page-item" th:classappend="${i} == ${dto.pageNum} ? 'active'">
                     <a class="page-link" th:href="@{|/post/list?pageNum=${i}${dto.findQuery}|}">[[${i}]]</a>
                 </li>
+                
+                <!-- 다음 Next -->
                 <li th:if="${dto.endPageNum lt dto.totalPageCount}" class="page-item">
                     <a class="page-link" th:href="@{|/post/list?pageNum=${dto.endPageNum + 1}${dto.findQuery}|}">Next</a>
                 </li>

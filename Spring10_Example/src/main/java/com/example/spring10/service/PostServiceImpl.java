@@ -3,6 +3,7 @@ package com.example.spring10.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.example.spring10.dto.PostDto;
@@ -71,8 +72,55 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public void createPost(PostDto dto) {
-		// TODO Auto-generated method stub
+	public long createPost(PostDto dto) {
+		
+		//글 작성자를 얻어내어 dto에 담는다.//글작성자는 로그인된 user
+		String writer = SecurityContextHolder.getContext().getAuthentication().getName();
+		dto.setWriter(writer);		
+		
+		//저장할 글번호를 미리 얻어온다.
+		long num = postDao.getSequence();
+		//dto에 글번호를 넣은 다음 DB에 저장한다.
+		dto.setNum(num);
+		postDao.insert(dto);
+		//글번호를 리턴해준다.
+		return num;
+	}
+
+	@Override
+	public PostDto getByNum(long num) {
+
+		return postDao.getData(num);
+	}
+
+	@Override
+	public PostDto getDetail(PostDto dto) {
+		
+		return postDao.getDetail(dto);
+	}
+
+	@Override
+	public void updatePost(PostDto dto) {
+		
+		postDao.update(dto);
+	}
+
+	@Override
+	public void deletePost(long num) {
+		postDao.delete(num);
+		
+	}
+
+	@Override
+	public void manageViewCount(long num, String sessionId) {
+		//이미 읽었는지 여부를 얻어낸다.
+		boolean isReaded=postDao.isReaded(num, sessionId);
+		if(!isReaded) {
+			//글조회수도 1증가시킨다.
+			postDao.addViewCount(num);
+			//이미 읽었다고 표시한다.
+			postDao.insertReaded(num, sessionId);
+		}
 		
 	}
 
