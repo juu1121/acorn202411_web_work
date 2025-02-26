@@ -52,7 +52,7 @@
                        parentNum, deleted, comments.createdAt, profileImage
                 FROM comments 
                 JOIN users ON comments.writer = users.userName
-                WHERE c.postNum = #{postNum}
+                WHERE postNum = #{postNum}
                 ORDER BY parentNum DESC, num ASC
             ) result1
         )

@@ -1,5 +1,7 @@
 package com.example.spring10.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -7,8 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.spring10.dto.CommentDto;
+import com.example.spring10.dto.CommentListRequest;
 import com.example.spring10.dto.PostDto;
 import com.example.spring10.dto.PostListDto;
 import com.example.spring10.service.PostService;
@@ -18,6 +23,46 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class PostController {
 	@Autowired private PostService service;
+	
+	@PostMapping("/post/update-comment")
+	@ResponseBody
+	public Map<String, Boolean> updateComment(CommentDto dto){
+		service.updateComment(dto);
+		return Map.of("isSuccess", true);
+		//컨트롤러에서 @ResponseBody의 의미는 여기서 리턴해주는 데이터를 직접 응답의 body에 넣는다(직접 클라이언트한테 준다)
+		//ex) 저기서 리턴한게 문자 : 문자열을 준다 // Map(특정키값으로 데이터를 가지고있는것)/list/Dto일경우(dto의 필드를 이용) json으로 변경해서 준다
+	}
+	
+	@GetMapping("/post/delete-comment")
+	@ResponseBody 
+	public Map<String, Boolean> DeleteComment(long num){
+		
+		service.deleteComment(num);
+		// map을 리턴하면서 @ResponseBody 하면, 리턴문자열을 응답하는거
+		// @ResponseBody 어노테이션을 붙여 놓고 아래의 데이터를 리턴하면  {"isSuccess":true} 형식의 json문자열이 응답한다. 
+		return Map.of("isSuccess", true);
+	}
+	
+	@GetMapping("/post/comment-list")
+	@ResponseBody  //페치요청이오니까, json으로 응답 //dto에 저장된 내용을 json으로 응답하기 위한 어노테이션
+	Map<String, Object> commentList(CommentListRequest clr){
+		//CommentListRequest는 dto임
+		//CommentListRequest 객체에는 댓글의 pageNum과 원글의 글번호 postNum이 들어있다.
+		//clr을 전달받아서 Map을 리턴하는 구조로 만들거임!
+		
+		return service.getComments(clr); //여기서 Map이 리턴되고, 응답의 body에 넣음
+	}
+	
+	//댓글 저장 요청처리
+	@PostMapping("/post/save-comment")
+	@ResponseBody //페치요청이오니까, json으로 응답 //dto에 저장된 내용을 json으로 응답하기 위한 어노테이션
+	public CommentDto saveComment(CommentDto dto) { //이 dto에는 content/postNum/targetWriter이 담겨있다.
+		//댓글이 원글의댓글인지, 대댓글인지 확인하는 법은 parentNum이 0이냐 아니냐에따른다. (parentNum은 있을수도없을수도=전달되는게없으면 디폴트0이있겠지)
+		service.createComment(dto); //댓글저장 , 여기서 parentNum확인하고 추가...
+		
+		
+		return dto;
+	}
 	
 	//글 삭제 요청 처리
 	@GetMapping("/post/delete")

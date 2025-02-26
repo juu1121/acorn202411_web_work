@@ -91,4 +91,10 @@ public class PostDaoImpl implements PostDao {
 		return session.update("post.addViewCount", num);
 	}
 
+	@Override
+	public int deleteReaded(long num) {
+		
+		return session.delete("post.deleteReaded", num);
+	}
+
 }

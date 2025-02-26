@@ -20,6 +20,11 @@
 		</choose>		
 	</sql>
 	
+	<delete id="deleteReaded" parameterType="long">
+		DELETE FROM readed_data
+		WHERE num=#{num}
+	</delete>
+	
 	<insert id="insertReaded" parameterType="map">
 		INSERT INTO readed_data
 		(num, session_id)

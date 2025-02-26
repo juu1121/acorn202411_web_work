@@ -11,4 +11,5 @@ public interface CommentDao {
 	public long getSequence();
 	public CommentDto getData(long num);
 	public List<CommentDto> getList(CommentDto dto);
+	public int getCount(long postNum);
 }
