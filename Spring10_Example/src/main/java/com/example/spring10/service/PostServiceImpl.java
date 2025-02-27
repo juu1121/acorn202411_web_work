@@ -12,6 +12,7 @@ import com.example.spring10.dto.CommentDto;
 import com.example.spring10.dto.CommentListRequest;
 import com.example.spring10.dto.PostDto;
 import com.example.spring10.dto.PostListDto;
+import com.example.spring10.exception.DeniedException;
 import com.example.spring10.repository.CommentDao;
 import com.example.spring10.repository.PostDao;
 
@@ -113,6 +114,15 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public void deletePost(long num) {
+		/*
+		//글 작성자와 로그인 된 userName과 다르면 금지된 Exception을 발생시키고 ExceptionController에서 처리하게 한다.
+		String writer = postDao.getData(num).getWriter();
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		if(!writer.equals(userName)) {
+			throw new DeniedException("남의 글 지우려고하면 안돼영");
+		}
+		*/
+		
 		//posts의 num을 참조하고 있는 자식 레코드를 미리 삭제
 		postDao.deleteReaded(num);
 		//글삭제 
@@ -153,6 +163,7 @@ public class PostServiceImpl implements PostService{
 
 	@Override
 	public void updateComment(CommentDto dto) {
+		
 		commentDao.update(dto);
 		
 	}

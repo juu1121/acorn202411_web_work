@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>/error/denied.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>요청이 거부 되었습니다.</h1>
+		<p th:text="${exception.message}"></p>
+		<a th:href="@{/}">인덱스로 가기</a>
+	</div>
+</body>
+</html>
