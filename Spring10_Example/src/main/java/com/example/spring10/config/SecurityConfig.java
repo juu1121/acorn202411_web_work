@@ -24,7 +24,7 @@ public class SecurityConfig {
 		//spring security가 인증과정을 거치지 않는 요청경로
 		String[] whiteList= {"/", "/play", "/user/loginform", "/user/login-fail", "/user/expired",
 				"/user/signup-form", "/user/signup", "/user/checkid", "/upload/**", 
-				"/post/list", "/post/view"};
+				"/post/list", "/post/view", "/file/list"};
 		
 		httpSecurity
 		//iframe을 사용할수있도록설정(default값은 사용불가, SmartEditor에서 필요함)

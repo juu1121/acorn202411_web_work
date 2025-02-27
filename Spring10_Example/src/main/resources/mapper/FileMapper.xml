@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="file">
+
+	<select id="getList" resultType="com.example.spring10.dto.FileDto">
+		SELECT num, uploader, orgfilename, savefilename, filesize, uploadedat
+		FROM  files
+		ORDER BY num asc
+	</select>
+	
+	<insert id="insert" parameterType="com.example.spring10.dto.FileDto">
+		INSERT INTO files
+		(num, uploader, orgfileName, saveFileName, FileSize, UploadedAt)
+		VALUES(files_seq.NEXTVAL, #{uploader}, #{orgFileName}, #{saveFileName}, #{fileSize}, SYSDATE)	
+	</insert>
+
+	<select id="getData" parameterType="long" resultType="com.example.spring10.dto.FileDto">
+		SELECT * FROM files 
+		WHERE num=#{num}
+	</select>
+</mapper>
