@@ -1,21 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="file">
-
-	<select id="getList" resultType="com.example.spring10.dto.FileDto">
-		SELECT num, uploader, orgfilename, savefilename, filesize, uploadedat
-		FROM  files
-		ORDER BY num asc
-	</select>
 	
-	<insert id="insert" parameterType="com.example.spring10.dto.FileDto">
-		INSERT INTO files
-		(num, uploader, orgfileName, saveFileName, FileSize, UploadedAt)
-		VALUES(files_seq.NEXTVAL, #{uploader}, #{orgFileName}, #{saveFileName}, #{fileSize}, SYSDATE)	
-	</insert>
-
 	<select id="getData" parameterType="long" resultType="com.example.spring10.dto.FileDto">
-		SELECT * FROM files 
+		SELECT num, uploader, title, orgFileName, saveFileName, fileSize, uploadedAt
+		FROM files
 		WHERE num=#{num}
 	</select>
+
+	<select id="getList" resultType="com.example.spring10.dto.FileDto">
+		SELECT num, uploader, title, orgFileName, saveFileName, fileSize, uploadedAt
+		FROM files
+		ORDER BY num DESC
+	</select>
+
+	<!-- 파일 정보 삽입 (INSERT) -->
+    <insert id="insert" parameterType="com.example.spring10.dto.FileDto">
+        INSERT INTO files (num, uploader, title, orgFileName, saveFileName, fileSize, uploadedAt)
+        VALUES (files_seq.NEXTVAL, #{uploader}, #{title}, #{orgFileName}, #{saveFileName}, #{fileSize}, SYSDATE)
+    </insert>
+
+    <!-- 파일 정보 수정 (UPDATE) - 제목(title)만 수정 -->
+    <update id="update" parameterType="com.example.spring10.dto.FileDto">
+        UPDATE files
+        SET title = #{title}
+        WHERE num = #{num}
+    </update>
+
+    <!-- 파일 삭제 (DELETE) -->
+    <delete id="delete" parameterType="long">
+        DELETE FROM files WHERE num = #{num}
+    </delete>	
 </mapper>

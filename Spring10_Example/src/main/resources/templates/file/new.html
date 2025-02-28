@@ -7,10 +7,15 @@
 <body>
 	<div class="container">
 		<h1>파일업로드 폼</h1>
-		<form th:action="@{/file/upload}" method="post" enctype="multipart/form-data">
-			<input type="text" name="title" placeholder="제목입력..."/>
-			<br/>
-			<input type="file" name="myFile"/>
+		<form th:action="@{/file/save}" method="post" enctype="multipart/form-data">
+			<div>
+				<label for="title">제목(설명)</label>
+				<input type="text" name="title" id="title" placeholder="제목입력..."/>
+			</div>
+			<div>
+				<label for="myFile">첨부파일</label>
+				<input type="file" name="myFile" id="myFile"/>			
+			</div>
 			<button type="submit">업로드</button>
 		</form>
 	</div>

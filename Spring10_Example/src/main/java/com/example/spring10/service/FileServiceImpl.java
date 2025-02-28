@@ -18,27 +18,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.spring10.dto.FileDto;
 import com.example.spring10.repository.FileDao;
+
 @Service
 public class FileServiceImpl implements FileService {
-
-	@Autowired private FileDao fileDao;
-
-	@Value("${file.location}") // 해당키값으로 저장한 내용을 읽어와서 필드에 넣어준다!
+	
+	
+	@Value("${file.location}") // 파일저장할 위치 // 해당키값으로 저장한 내용을 읽어와서 필드에 넣어준다!
 	private String fileLocation;
+
+	@Autowired private FileDao dao;
 	
 	@Override
-	public List<FileDto> getFiles() {
-		
-		
-		List<FileDto> list=fileDao.getList();
-		return list;
-	}
-
-	@Override
-	public void createFile(FileDto dto) {
+	public void saveFile(FileDto dto) { //현재dto에는 title과myfile만 전달
 		//FileDto 객체에서 MultipartFile객체를 얻어낸다.
 		MultipartFile myFile = dto.getMyFile();
-		String title = dto.getTitle();
 		
 		//만일 파일이 업로드되지않았다면
 		if(myFile.isEmpty()) {
@@ -51,7 +44,6 @@ public class FileServiceImpl implements FileService {
 		long fileSize = myFile.getSize();
 		//저장할 파일의 이름을 Universal Unique 한 문자열로 얻어내기
 		String saveFileName=UUID.randomUUID().toString();
-		System.out.println("saveFileName"+saveFileName);
 		//저장할 파일의 전체경로 구성하기
 		String filePath=fileLocation+File.separator+saveFileName;
 		try {
@@ -61,32 +53,44 @@ public class FileServiceImpl implements FileService {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		String writer=SecurityContextHolder.getContext().getAuthentication().getName();
-		FileDto resultdto= FileDto.builder().title(title).orgFileName(orgFileName).fileSize(fileSize).saveFileName(saveFileName).myFile(myFile).uploader(writer).build();
-		fileDao.insert(resultdto);
-		System.out.println("여기 : "+resultdto);
+		//업로더 = 로그인한 사용자
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		//FileDto에 추가 정보를 담는다.
+		dto.setUploader(userName);
+		dto.setOrgFileName(orgFileName);
+		dto.setSaveFileName(saveFileName);
+		dto.setFileSize(fileSize);
+		//dao를 이용해서 DB에 저장하기
+		dao.insert(dto);
 	}
 
 	@Override
-	public FileDto getByNum(long num) {
+	public void updateFile(FileDto dto) {
+		dao.update(dto);
 		
-		return fileDao.getData(num);
 	}
 
 	@Override
-	public ResponseEntity<InputStreamResource> download(long num) {
+	public void deleteFile(long num) {
+		dao.delete(num);
 		
-		FileDto dto = fileDao.getData(num);
-		System.out.println("야야야야"+ dto);
+	}
+
+	@Override
+	public List<FileDto> getFiles() {
+		
+		return dao.getList();
+	}
+
+	@Override
+	public ResponseEntity<InputStreamResource> getResponse(long num) {
+		//이제 드디어 DB에서 읽어온다
+		FileDto dto = dao.getData(num);
 		String orgFileName = dto.getOrgFileName();
 		String saveFileName = dto.getSaveFileName();
 		long fileSize = dto.getFileSize();
-		System.out.println("orgFileName"+ orgFileName);
-		System.out.println("saveFileName"+ saveFileName);
-		System.out.println("fileSize"+ fileSize);
 		
-		//원래는 DB 에서 읽어와야 하지만 지금은 다운로드해줄 파일의 정보가 요청 파라미터로 전달된다.
+		
 		try {
 			//다운로드 시켜줄 원본 파일명
 			String encodedName=URLEncoder.encode(orgFileName, "utf-8"); //원본파일명을 인코딩=한글떄문에
@@ -122,8 +126,8 @@ public class FileServiceImpl implements FileService {
 			//예외 발생시키기
 			throw new RuntimeException("파일을 다운로드 하는중에 에러 발생!");
 		}
+		
 	}
-
 
 
 }

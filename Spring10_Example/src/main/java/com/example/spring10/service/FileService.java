@@ -15,8 +15,10 @@ import com.example.spring10.dto.FileDto;
 
 
 public interface FileService  {
+	public void saveFile(FileDto dto);
+	public void updateFile(FileDto dto);
+	public void deleteFile(long num);
 	public List<FileDto> getFiles();
-	public void createFile(FileDto dto);
-	public FileDto getByNum(long num); //파일하나의 정보
-	public ResponseEntity<InputStreamResource> download(long num);
+	public ResponseEntity<InputStreamResource> getResponse(long num);
+	
 }	
