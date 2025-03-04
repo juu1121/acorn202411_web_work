@@ -15,6 +15,27 @@ public class MemberController {
 
 	@Autowired private MemberService service;
 	
+	@PostMapping("/member/update")
+	public String update(MemberDto dto) {
+		service.updateMember(dto);
+		return "redirect:/member/list";
+	}
+	
+	@GetMapping("/member/edit")
+	public String edit(int num, Model model) {
+		
+		MemberDto dto = service.getMember(num);
+		model.addAttribute("dto", dto);
+		
+		return "member/edit";
+	}
+	
+	@GetMapping("/member/delete")
+	public String delete(int num) {
+		service.deleteMember(num);
+		return "redirect:/member/list";
+	}
+	
 	@PostMapping("/member/save")
 	public String save(MemberDto dto) {
 		service.saveMember(dto);

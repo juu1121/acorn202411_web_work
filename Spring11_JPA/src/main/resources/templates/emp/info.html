@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>/emp/info.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>사원정보</h1>
+		<table>
+			<thead>
+				<tr>
+					<th>사원번호</th>
+					<th>사원이름</th>
+					<th>직업</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td th:text = "${dto.deptno}"></td>
+					<td th:text = "${dto.dname}"></td>
+					<td th:text = "${dto.job}"></td>
+
+				</tr>
+			</tbody>
+		</table>	
+	
+	
+	
+	</div>
+
+</body>
+</html>

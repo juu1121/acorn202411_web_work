@@ -18,8 +18,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@Entity(name="MEMBER_INFO")
+@Entity(name="MEMBER_INFO") //MEMBER_INFO 라는 이름의 테이블이 만들어진다.
 public class Member {
+	/*
+	 * @Entity 어노테이션으로 테이블이 만들어지고 아래에 나열한 필드명으로 테이블의 칼럼이 결정된다.
+	 * @Id는 primary key 값으로 사용할 필드에 붙인다. 
+	 * @GeneratedValue는 시퀀스가 자동으로 만들어지고 사용되게 해준다.
+	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer num;

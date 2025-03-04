@@ -18,8 +18,16 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Override
 	public List<MemberDto> getAll() {
-		//Member Entity의 목록
-		List<Member> entityList = repo.findAll();
+		//1. Member Entity의 목록
+		//List<Member> entityList = repo.findAll();
+		
+		//2. 추가한 메소드를 이용해서 num에 대해서 내림차순 정렬된 목록을 얻어낼수있다.
+		//List<Member> entityList = repo.findAllByOrderByNumDesc();
+		
+		//3.
+		List<Member> entityList = repo.getList();
+		
+		
 /*		
 		//MemberDto의 목록으로 만들어서 리턴해야한다.
 		List<MemberDto> list = new ArrayList<>();
@@ -28,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
 			list.add(MemberDto.toDto(tmp));
 		}
 */
-		
+		//stream()을 이용하면 한줄의 coding으로 위의 동작을 할수있다.
 //		List<MemberDto> list = entityList.stream().map(item->MemberDto.toDto(item)).toList();
 		List<MemberDto> list = entityList.stream().map(MemberDto::toDto).toList();
 		
@@ -42,4 +50,43 @@ public class MemberServiceImpl implements MemberService {
 		
 	}
 
+	@Override
+	public void deleteMember(int num) {
+		repo.deleteById(num);
+		
+	}
+
+	@Override
+	public MemberDto getMember(int num) {
+		//id를 이용해서 Member Entity type을 얻어낸다.
+		//옵셔널에서 엔티티를 얻어내는 방법 = get메소드
+		Member member = repo.findById(num).get();
+		
+		// Emtity를 dto로 변경해서 리턴한다.
+		return MemberDto.toDto(member);
+	}
+
+	@Override
+	public void updateMember(MemberDto dto) {
+		// MemberDto를 Entity로 변경해서 save(수정)한다. 
+		repo.save(Member.toEntity(dto));
+		
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
