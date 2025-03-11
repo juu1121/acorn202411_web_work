@@ -23,10 +23,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class JwtFilter extends OncePerRequestFilter{ //OncePerRequestFilter 추상클래스 상속받는다.
+public class JwtFilter extends OncePerRequestFilter{//OncePerRequestFilter 클래스를 상속받는다.
+	
 	@Autowired JwtUtil util;
-
-	//쿠키에 저장된 token의 이름
+	
+	//쿠키에 저장된 token 의 이름 
 	@Value("${jwt.name}") String jwtName;
 	
 	@Autowired CustomUserDetailsService service;
@@ -35,31 +36,39 @@ public class JwtFilter extends OncePerRequestFilter{ //OncePerRequestFilter 추�
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
-		String jwtToken = null;
+		String jwtToken="";
 		
-		//쿠키에서 token 추출 하기
+		//쿠키에서 token 추출
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
         	//반복문 돌면서 
             for (Cookie cookie : cookies) {
             	// custum.properties 파일에 설정된  "jwtToken" 이라는 쿠키이름으로 저장된 value 가 있는지 확인해서
                 if (jwtName.equals(cookie.getName())) {
-                	//있다면 그 value 값을 지역변수에 담기 
+                	//있다면 그 value 값을 디코딩해서 지역변수에 담기 
                     jwtToken = URLDecoder.decode(cookie.getValue(), StandardCharsets.UTF_8);
                     break;
                 }
             }
-        }		
+        }
         
-        String userName = null;
-		//요청의 Header에 "Authorization"이라는 키값으로 전달된 문자열이 있는지 읽어와본다.
-		String authHeader=request.getHeader("Authorization");
-		if(authHeader != null && authHeader.startsWith("Bearer ")) {
-			//"Bearer "(공백포함7자리)를 제외한 뒤의 token문자열을 얻어낸다.
-			jwtToken = authHeader.substring(7);
-			//userName을 token으로부터 얻어낸다.
-			userName = util.extractUsername(jwtToken);
-		}	
+        
+        //만일 쿠키에서 추출된 토큰이 없다면 
+		if(jwtToken.equals("")) {
+			//요청의 Header 에 "Authorization" 이라는 키값으로 전달된 문자열이 있는지 읽어와 본다.
+			String authHeader=request.getHeader("Authorization");
+			if(authHeader != null && authHeader.startsWith("Bearer ")) {
+				jwtToken = URLDecoder.decode(authHeader, StandardCharsets.UTF_8);
+			}
+		}
+       
+		String userName=null;
+		if(jwtToken.startsWith("Bearer ")) {
+			// "Bearer " 를 제외한 뒤의 token 문자열을 얻어낸다.
+			jwtToken = jwtToken.substring(7);
+			// userName 을 token 으로 부터 얻어낸다.
+			userName= util.extractUsername(jwtToken);
+		}
 		
 		//userName 이 존재하고  Spring Security 에서 아직 인증을 받지 않은 상태라면 
 		if(userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -78,8 +87,30 @@ public class JwtFilter extends OncePerRequestFilter{ //OncePerRequestFilter 추�
 				SecurityContextHolder.getContext().setAuthentication(authToken);
 			}
 		}
-		System.out.println("JwtFilter 수행됨");
 		//다음 spring 필터 chain 진행하기
-		filterChain.doFilter(request, response);
+		filterChain.doFilter(request, response);	
+		
 	} 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
