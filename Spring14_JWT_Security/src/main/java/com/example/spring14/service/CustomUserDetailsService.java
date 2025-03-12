@@ -48,9 +48,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 					.email("aaa@naver.com")
 					.role(role)
 					.build();
-		
-		//권한 목록을 List 에 담아서  (지금은 1개 이지만)
+		/*
+		 * Spring Security에서 role과 authority는 약간의 차이가 있지만 편의상 같다라고 생각하자
+		 * ROLE_USER를 예를들어  
+		 * 해당 USER의 role은 "USER"
+		 * 해당 USER의 authority는 "ROLE_USER"임을 명심하자..
+		 */
+		//권한 목록을 List 에 담아서  (지금은 1개 이지만) //List니까 여러개담을수있지만 일이커져..하나만담자
 		List<GrantedAuthority> authList=new ArrayList<>();
+		//authority 객체를 생성하는 것이기때문에 생성자에 "ROLE_XXX"형식의 문자열을 넣어줘야한다.
 		authList.add(new SimpleGrantedAuthority(dto.getRole()));
 		
 		//UserDetails 객체를 생성해서 
