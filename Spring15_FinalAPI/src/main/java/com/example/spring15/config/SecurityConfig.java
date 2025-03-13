@@ -1,9 +1,10 @@
-package com.example.spring14.config;
+package com.example.spring15.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -17,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.savedrequest.CookieRequestCache;
 
-import com.example.spring14.filter.JwtFilter;
+import com.example.spring15.filter.JwtFilter;
 
 import jakarta.servlet.http.Cookie;
 
@@ -39,60 +40,29 @@ public class SecurityConfig {
 	 *  또한 SecurityFilterChain 객체도 스프링이 관리하는 Bean 이 되어야 한다  
 	 */
 	@Bean //메소드에서 리턴되는 SecurityFilterChain 을 bean 으로 만들어준다.
-	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, 
-			AuthSuccessHandler successHandler, AuthFailHandler failHandler) throws Exception{
-		String[] whiteList= {"/error", "/favicon.ico", "/api/auth", "/", "/play", "/user/loginform", "/user/login-fail", "/user/expired"};
+	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+		String[] whiteList= {"/auth"};
 		 
 		httpSecurity
+		.headers(header->
+			//동일한 origin 에서 iframe 을 사용할수 있도록 설정(default 값은 사용불가)
+			header.frameOptions(option->option.sameOrigin()) //SmartEditor 에서 필요함
+		)
 		.csrf(csrf->csrf.disable())
 		.authorizeHttpRequests(config ->
 			config
 				.requestMatchers(whiteList).permitAll()
 				.requestMatchers("/admin/**").hasRole("ADMIN")
 				.requestMatchers("/staff/**").hasAnyRole("ADMIN", "STAFF")
+				.requestMatchers(HttpMethod.POST, "/user").permitAll() //api회원가입 요청은 모두다 받아들이도록
 				.anyRequest().authenticated()
-		)
-		.formLogin(config ->
-			config
-				//인증을 거치지 않은 사용자를 리다일렉트 시킬 경로 설정 
-				.loginPage("/user/required-loginform") //get방식
-				//로그인 처리를 할때 요청될 url 설정 ( spring security 가 login 처리를 대신 해준다)
-				.loginProcessingUrl("/user/login") //post방식
-				//로그인 처리를 대신 하려면 어떤 파라미터명으로 username 과 password 가 넘어오는지 알려주기 
-				.usernameParameter("userName")
-				.passwordParameter("password")
-				.successHandler(successHandler) //로그인 성공 핸들러 등록
-				//.failureForwardUrl("/user/login-fail") 
-				.failureHandler(failHandler)//위의 forword 되는것대신에 Handler등록하기
-				.permitAll() //위에 명시한 모든 요청경로를 로그인 없이 요청할수 있도록 설정 
-		)
-		.logout(config ->
-			config
-				.logoutUrl("/user/logout")//Spring Security 가 자동으로 로그아웃 처리 해줄 경로 설정
-				.logoutSuccessHandler((request, response, auth)->{
-					Cookie cook=new Cookie(jwtName, null);
-					//쿠키를 삭제하기 위해 setMaxAge(0)
-					cook.setMaxAge(0);
-					cook.setPath("/");
-					response.addCookie(cook);
-					//쿠키 삭제후에 최상위 경로로 리다일렉트 이동
-					response.sendRedirect(request.getContextPath()+"/");
-				})
-				.permitAll()
-		)
-		.exceptionHandling(config ->
-			//403 forbidden 인 경우 forward 이동 시킬 경로 설정 
-			config.accessDeniedPage("/user/denied")
-		)
+		)	
 		.sessionManagement(config ->
-			//세션을 사용하지 않도록 설정한다.
+			//세션을 사용하지 않도록 STATELESS로 설정한다.
 			config.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		)
-		//원래 가려던 목적지 정보를 쿠키에 자동으로 저장해주는 기능 
-		.requestCache(config->config.requestCache(new CookieRequestCache()))
 		//JwtFilter를 Spring Security 필터보다 미리 수행되게 하기
 		.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-		
 		
 		// 설정 정보를 가지고 있는 HttpSecurity 객체의 build() 메소드를 호출해서 리턴되는 객체를 리턴해준다.
 		return httpSecurity.build();

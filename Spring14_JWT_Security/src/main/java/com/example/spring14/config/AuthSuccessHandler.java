@@ -36,7 +36,6 @@ public class AuthSuccessHandler extends SavedRequestAwareAuthenticationSuccessHa
 	//Jwt 토큰 유틸
 	@Autowired private JwtUtil jwtUtil;
 	
-	
 	//jwt 를 쿠키로 저장할때 쿠키의 이름
 	@Value("${jwt.name}")
 	private String jwtName;

@@ -1,4 +1,4 @@
-package com.example.spring14.filter;
+package com.example.spring15.filter;
 
 import java.io.IOException;
 import java.net.URLDecoder;
@@ -16,8 +16,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.spring14.service.CustomUserDetailsService;
-import com.example.spring14.util.JwtUtil;
+import com.example.spring15.service.CustomUserDetailsService;
+import com.example.spring15.util.JwtUtil;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
