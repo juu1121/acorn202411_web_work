@@ -1,5 +1,6 @@
 package com.example.spring15.controller;
 
+import java.security.Security;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +10,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.spring15.dto.UserDto;
+import com.example.spring15.service.UserService;
 import com.example.spring15.util.JwtUtil;
 
 @RestController
@@ -22,6 +27,37 @@ public class UserController {
 	@Autowired JwtUtil jwtUtil;
 	//SecurityConfig 클래스에서 Bean 이된 AuthenticationManager 객체 주입받기 
 	@Autowired AuthenticationManager authManager; //이걸 이용해 userName과 password가 맞는지확인
+	@Autowired UserService userService;
+	
+	@PatchMapping("/user/password")
+	public String updatePassword(@RequestBody UserDto dto) {
+		
+		userService.changePassword(dto);
+		
+		return "success";
+	}
+	
+	
+	//jaon 문자열이 전송되는게 아니기때문에 @RequestBody는 필요없다.//멀티파트폼 전송되는 메소드임!
+	@PatchMapping("/user")
+	public String updateUser(UserDto dto) {
+		userService.updateUserInfo(dto);
+		return "success!";
+	}
+	
+	@GetMapping("/user")
+	public UserDto getInfo() {
+		//여기가 진행된다는건 1회성로그인이됐다는것 = 시큐리티가 userName을 알고있을것
+		//이미 1회성로그인이 되어있기때문에 userName을 얻어낼수있다. //
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		return userService.getByUserName(userName);
+	}
+	
+	//클라이언트가 토큰이 정상 동작하는지 확인할경로
+	@GetMapping("/ping")
+	public String ping() {
+		return "pong";
+	}
 	
 	//토큰을 발급받는 로그인관련메소드 //리액트에서 로그인할때, 포스트맨으로 로그인할때, 이 메소드를 사용 //토큰없이요청해야해서 whitelist 
 	@PostMapping("/auth")
