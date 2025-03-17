@@ -41,7 +41,7 @@ public class SecurityConfig {
 	 */
 	@Bean //메소드에서 리턴되는 SecurityFilterChain 을 bean 으로 만들어준다.
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-		String[] whiteList= {"/auth", "/upload/**"};
+		String[] whiteList= {"/auth", "/upload/**", "/editor_upload"};
 		 
 		httpSecurity
 		.headers(header->
@@ -55,6 +55,8 @@ public class SecurityConfig {
 				.requestMatchers("/admin/**").hasRole("ADMIN")
 				.requestMatchers("/staff/**").hasAnyRole("ADMIN", "STAFF")
 				.requestMatchers(HttpMethod.POST, "/user").permitAll() //api회원가입 요청은 모두다 받아들이도록
+				.requestMatchers(HttpMethod.GET, "/posts", "/posts/**").permitAll() //"/posts"글 목록 요청 공개(GET방식 /post요청만 허용) + "/posts/**" =>글 자세히보기 
+				
 				.anyRequest().authenticated()
 		)	
 		.sessionManagement(config ->
