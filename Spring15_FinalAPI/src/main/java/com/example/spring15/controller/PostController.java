@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,38 +70,42 @@ public class PostController {
 	}
 	
 	//글 삭제 요청 처리
-	@GetMapping("/post/delete")
-	public String delete(long num) {
+	@DeleteMapping("/posts/{num}")
+	public PostDto delete(@PathVariable(value="num") long num) {
+		//삭제하기전 글 정보를 읽고
+		PostDto dto = service.getByNum(num);
+		//서비스 객체를 이용해 삭제하기
 		service.deletePost(num);
-		return "post/delete";
+		//삭제된 글 정보를 리턴하가.
+		return dto;
 	}
 	
 	//글 수정 반영요청처리
-	@PostMapping("/post/update")
-	public String update(PostDto dto, RedirectAttributes ra) {
+	@PatchMapping("/posts/{num}")
+	public PostDto update(@PathVariable(value="num") long num, @RequestBody PostDto dto) {
+		//num에는 글번호 + dto에는 title과 content가 담겼다
+		//글번호를 dto에 담는다.
+		dto.setNum(num);
+		//서비스를 이용해서 수정반영
 		service.updatePost(dto);
-		/*
-		 * RedirectAttributes 객체에 FlashAttribute 로 담은 내용은
-		 * redirect 이동된 요청을 처리하는 곳의 Model 객체에 자동으로 담긴다.
-		 */
-		ra.addFlashAttribute("updateMessage", dto.getNum()+"번 글을 수정했습니다.");
-		//수정 반영후 글 자세히 보기로 이동
-		return "redirect:/post/view?num="+dto.getNum();
+
+		//수정된 글 정보 리턴
+		return dto;
 	}
 	
-	//글 수정 폼 요청처리
-	@GetMapping("/post/edit")
-	public String edit(long num, Model model) {
-		//수정할 글정보를 얻어와서 Model객체에 담는다.
-		PostDto dto = service.getByNum(num);
-		model.addAttribute("dto", dto);
-		return "post/edit";
-	}
-	
-	@GetMapping("/post/new")
-	public String newForm() {
-		return "post/new";
-	}
+//	//글 수정 폼 요청처리
+//	@GetMapping("/post/edit")
+//	public String edit(long num, Model model) {
+//		//수정할 글정보를 얻어와서 Model객체에 담는다.
+//		PostDto dto = service.getByNum(num);
+//		model.addAttribute("dto", dto);
+//		return "post/edit";
+//	}
+//	
+//	@GetMapping("/post/new")
+//	public String newForm() {
+//		return "post/new";
+//	}
 	
 	@PostMapping("/posts")
 	public Map<String, Object> save(@RequestBody PostDto dto) {
