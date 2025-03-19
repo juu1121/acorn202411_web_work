@@ -56,7 +56,6 @@ public class SecurityConfig {
 				.requestMatchers("/staff/**").hasAnyRole("ADMIN", "STAFF")
 				.requestMatchers(HttpMethod.POST, "/user").permitAll() //api회원가입 요청은 모두다 받아들이도록
 				.requestMatchers(HttpMethod.GET, "/posts", "/posts/**").permitAll() //"/posts"글 목록 요청 공개(GET방식 /post요청만 허용) + "/posts/**" =>글 자세히보기 
-				
 				.anyRequest().authenticated()
 		)	
 		.sessionManagement(config ->

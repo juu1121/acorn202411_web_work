@@ -48,23 +48,28 @@ public class PostController {
 		return Map.of("isSuccess", true);
 	}
 	
-	@GetMapping("/post/comment-list")
-	@ResponseBody  //페치요청이오니까, json으로 응답 //dto에 저장된 내용을 json으로 응답하기 위한 어노테이션
-	Map<String, Object> commentList(CommentListRequest clr){
-		//CommentListRequest는 dto임
-		//CommentListRequest 객체에는 댓글의 pageNum과 원글의 글번호 postNum이 들어있다.
-		//clr을 전달받아서 Map을 리턴하는 구조로 만들거임!
+	@GetMapping("/posts/{num}/comments")
+	public Map<String, Object> commentList(@PathVariable("num") long num, int pageNum){ 
+																//파라미터 pageNum선언만해서 추출
+		//CommentListRequest에 필요한 정보를 담고
+		CommentListRequest clr = new CommentListRequest();
+		clr.setPostNum(num);
+		clr.setPageNum(pageNum);
+		//서비스를 이용해서 댓글 목록 정보를 얻어내서 응답한다.
+		return service.getComments(clr); //여기서 Map이 리턴되고, 
+		//이 Map의 형태는 {"list" : [{댓글목록},{},[}], "totalPageCount" : 19(페이지의갯수)} 
 		
-		return service.getComments(clr); //여기서 Map이 리턴되고, 응답의 body에 넣음
 	}
 	
 	//댓글 저장 요청처리
-	@PostMapping("/post/save-comment")
-	@ResponseBody //페치요청이오니까, json으로 응답 //dto에 저장된 내용을 json으로 응답하기 위한 어노테이션
-	public CommentDto saveComment(CommentDto dto) { //이 dto에는 content/postNum/targetWriter이 담겨있다.
+	@PostMapping("/posts/{num}/comments")
+	public CommentDto saveComment(@PathVariable(value="num") long num, @RequestBody CommentDto dto) { //이 dto에는 content/postNum/targetWriter이 담겨있다.
 		//댓글이 원글의댓글인지, 대댓글인지 확인하는 법은 parentNum이 0이냐 아니냐에따른다. (parentNum은 있을수도없을수도=전달되는게없으면 디폴트0이있겠지)
-		service.createComment(dto); //댓글저장 , 여기서 parentNum확인하고 추가...
 		
+		//dto에 원글의 글 번호담기
+		dto.setPostNum(num);
+		//서비스를 이용해서 댓글 저장
+		service.createComment(dto); //댓글저장 , 여기서 parentNum확인하고 추가...
 		
 		return dto;
 	}
