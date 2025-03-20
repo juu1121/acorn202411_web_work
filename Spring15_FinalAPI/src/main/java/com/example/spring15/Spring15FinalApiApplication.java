@@ -4,7 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
-@PropertySource(value="classpath:custom.properties")
+//@PropertySource(value="classpath:custom.properties")
+@PropertySource({"classpath:custom.properties", "classpath:gemini.properties"})
 @SpringBootApplication
 public class Spring15FinalApiApplication {
 

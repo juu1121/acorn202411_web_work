@@ -1,0 +1,2 @@
+# custom.properties 파일은 git 에서 추적하지 않도록한다.
+custom.properties
