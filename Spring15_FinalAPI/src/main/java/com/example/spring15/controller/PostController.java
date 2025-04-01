@@ -29,7 +29,7 @@ import jakarta.servlet.http.HttpSession;
 public class PostController {
 	@Autowired private PostService service;
 	
-	@PatchMapping("/posts/{num}/comments")
+	@PatchMapping("/posts/{num}/comments/{commentNum}")
 	public Map<String, Boolean> updateComment( @RequestBody CommentDto dto){ 
 												//dto에는 댓글의 글번호와 댓글의 내용이 들어있다. 
 		service.updateComment(dto);
@@ -38,10 +38,10 @@ public class PostController {
 		//ex) 저기서 리턴한게 문자 : 문자열을 준다 // Map(특정키값으로 데이터를 가지고있는것)/list/Dto일경우(dto의 필드를 이용) json으로 변경해서 준다
 	}
 	
-	@GetMapping("/post/delete-comment")
+	@DeleteMapping("/posts/{num}/comments/{commentNum}")
 	@ResponseBody 
-	public Map<String, Boolean> DeleteComment(long num){
-		
+	public Map<String, Boolean> deleteComment(@PathVariable("commentNum") long num){
+		//래잔 잭등 갇베라디
 		service.deleteComment(num);
 		// map을 리턴하면서 @ResponseBody 하면, 리턴문자열을 응답하는거
 		// @ResponseBody 어노테이션을 붙여 놓고 아래의 데이터를 리턴하면  {"isSuccess":true} 형식의 json문자열이 응답한다. 
