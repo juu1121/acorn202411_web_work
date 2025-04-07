@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>/resources/static/index.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>인덱스 페이지 입니다.</h1>
+		<button id="connectBtn">WebSocket 연결하기</button>
+		<input type="text" placeholder="메세지 입력..." id="inputMsg" />
+		<button id="sendBtn">전송</button>
+	</div>
+	<script>
+		let socket = null; //소켓을 전역으로 선언 
+		
+		document.querySelector("#connectBtn").addEventListener("click", ()=>{
+			//spring boot 서버에 웹소켓 연결 요청하기 
+			socket=new WebSocket("ws://localhost:9000/ws"); //해당경로로 웹소켓연결요청
+			//socket=new WebSocket("ws://192.168.0.107:9000/ws"); //쌤꺼..? 
+			
+			//웹소켓연결에 성공했을떄, 클라이언트가 서버에 문자열보냄
+			socket.onopen = ()=>{
+				socket.send("hi spring boot!");
+			};
+			
+			
+			// 서버에서 메세지가 도착하면 실행할 함수 등록
+			socket.onmessage = (event)=>{
+				//콘솔창에 서버가 보낸 메세지가 출력 //웹소켓에 메세지가 도착했을때, 서버가 클라이언트에게 보낸게 여기로 도착 
+				console.log(event.data);
+			};
+		});
+		document.querySelector("#sendBtn").addEventListener("click", ()=>{
+			const msg = document.querySelector("#inputMsg").value;
+			if(socket){
+				socket.send(msg);
+			}
+		});
+	</script>
+</body>
+</html>
