@@ -103,7 +103,14 @@ public class DispatchingSocketHandler extends TextWebSocketHandler {
 	//클라이언트의 웹소켓 연결이 종료되면 호출되는 메소드 
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+		//접속이 종료된 session을 List에서 제거
 		sessionManager.remove(session);
-		
+		//접속이 종료된 session을 이 대화방에 입장한 session 인지 확인해서 맞으면 Map 에서도 제거
+		String userName = sessionManager.getSessionUser(session);
+		//만일 userName이 null이 아니라면 대화방에 입장된 userName이다.
+		if(userName != null) {
+			//메소드 내부에서 2개의 Map에서 모두 제거되는 코드가 있다.
+			sessionManager.removeUser(userName);
+		}
 	}
 }
