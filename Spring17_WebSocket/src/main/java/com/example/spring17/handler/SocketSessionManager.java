@@ -63,7 +63,7 @@ public class SocketSessionManager {
 		WebSocketSession removedSession=userSessions.remove(userName);
 		//sessionUsers에서도 session을 이용해서 해당 정보를 제거하기
 		sessionUsers.remove(removedSession);
-		 
+		//1. 누가 퇴장했는지에 대한 정보를 Map에 담아서
 		//누가 퇴장 했는지 TextMessage 를 방에 입장한 모든 클라이언트에게 전송한다.
 		Map<String, Object> map = Map.of(
 			"type","leave",
@@ -71,6 +71,7 @@ public class SocketSessionManager {
 				"userName",userName 
 			)
 		);
+		//2. json으로 변경하고
 		String json = "{}";
 		try {
 			json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(map); 
@@ -90,7 +91,7 @@ public class SocketSessionManager {
 //			}
 //		""".formatted(userName);
 		
-		
+		// 3. broadcast 한다.
 		TextMessage msg = new TextMessage(json);
 		broadcast(msg);
 	}
@@ -108,6 +109,20 @@ public class SocketSessionManager {
 				e.printStackTrace();
 			}
 		});
+	}
+	
+	//특정 session에만 TextMessage를 전송하는 메소드
+	public void privateMessage(String userName, TextMessage msg) {
+		//userName에게 보낼수있는 session을 얻어내서
+		WebSocketSession session = userSessions.get(userName);
+		//만일 없으면 메소드 종료 
+		if(session == null)return;
+		try {
+			//해당 session 에만 메세지를 보낸다.
+			session.sendMessage(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void register(WebSocketSession session) {

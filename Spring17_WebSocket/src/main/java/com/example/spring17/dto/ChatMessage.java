@@ -6,4 +6,5 @@ import lombok.Data;
 public class ChatMessage {
 	public String userName;
 	public String text;
+	public String toUserName;
 }
