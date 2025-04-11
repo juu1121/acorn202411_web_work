@@ -27,6 +27,25 @@ public class ChatSocketController {
 	//객체 <=> json 상호 변경할 수 있는 객체
 	ObjectMapper mapper = new ObjectMapper();
 	
+	@SocketMapping("/chat/image")
+	public void chatImage(WebSocketSession session, ChatMessage message) {
+		Map<String, Object> map=Map.of(
+				"type","image",
+				"payload",Map.of(
+					"userName", message.getUserName(),
+					"saveFileName", message.getSaveFileName()
+				)
+			);
+			String json="{}";
+			try {
+				json=mapper.writeValueAsString(map);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+			TextMessage msg=new TextMessage(json);
+			sessionManager.broadcast(msg);		
+	}
+	
 	@SocketMapping("/chat/whisper")
 	public void chatWhisper(WebSocketSession session, ChatMessage message) {
 		Map<String, Object> map = Map.of(
