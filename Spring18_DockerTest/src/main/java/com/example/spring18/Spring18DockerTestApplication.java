@@ -2,7 +2,9 @@ package com.example.spring18;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.PropertySource;
 
+@PropertySource(value="classpath:custom.properties") //내가 설정한 properties문서를 스프링부트가 읽는다.
 @SpringBootApplication
 public class Spring18DockerTestApplication {
 

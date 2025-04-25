@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>/templates/gallery/upload.html</title>
+</head>
+<body>
+	<div class="container">
+		<h1>이미지 업로드 결과</h1>
+		<p>
+			설명 : <strong th:text=${caption}></strong>
+		</p>
+		<p>
+			저장된 파일명 : <strong th:text=${saveFileName}></strong>
+		</p>
+		<img th:src="@{'/upload/'+${saveFileName}}" />
+		<!-- 이 방식도 서버에 요청하는것! -->
+	</div>
+</body>
+</html>
